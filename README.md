@@ -1,3 +1,5 @@
 # second brain
-
-핵심적인 개념들을 기록하는 곳
+## 취업
+- 프로젝트
+- [코딩테스트](./coding-test/coding_test.md)
+- cs
