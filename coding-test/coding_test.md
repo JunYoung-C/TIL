@@ -1,7 +1,7 @@
 # 코테 대비 핵심 지식
 - [복집도](./complexity/complexity.md)
 - [문자열](./string/string.md)
-- [최단거리](./shortestpath/shortestpath.md)
+- [최단거리](graph/shortestpath.md)
 
 ## 비교적 익숙한 것들
 - 문자열
