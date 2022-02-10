@@ -1,11 +1,11 @@
 # String
 ## Index
-1. [유용한 개념](#1.-유용한-개념)
-2. [자주 쓰이는 문자열 함수](#2.-자주-쓰이는-문자열-함수)
-3. [자주 쓰이는 char형 함수](#3.-자주-쓰이는-char형-함수)
+1. [유용한 개념](#유용한-개념)
+2. [자주 쓰이는 문자열 함수](#자주-쓰이는-문자열-함수)
+3. [자주 쓰이는 char형 함수](#자주-쓰이는-char형-함수)
 ---
 
-## 1. 유용한 개념
+## 유용한 개념
 
 ### char형 변수 입력받기
 
@@ -51,7 +51,7 @@ int num10_8 = Integer.parseInt(num8, 8); // 77
 int num10_16 = Integer.parseInt(num16, 16); // 77
 ```
 
-## 2. 자주 쓰이는 문자열 함수
+## 자주 쓰이는 문자열 함수
 
 - `str.toCharArray()` : 문자열을 char형 배열로 변환
 - `String.valueOf()` : `str.toCharArray()`로 변환된 문자를 `String.valueOf(배열)`에 넣으면 문자열로 변환된다.
@@ -64,7 +64,7 @@ int num10_16 = Integer.parseInt(num16, 16); // 77
 - `str.replaceAll(String regex, String replacement)` : 정규식에 해당되는 여러 문자열을 변환하여 반환한다.
 - `str.replace(charSequence target, charSequence replacement)` : 특정 문자열을 변환하여 반환한다.
 
-## 3. 자주 쓰이는 char형 함수
+## 자주 쓰이는 char형 함수
 
 - `Character.isAlphabetic(c)` : c가 알파벳이면 true, 아니면 false 반환
 - `Character.isDigit(c)` : c가 숫자면 true, 아니면 false 반환
