@@ -16,7 +16,12 @@
     - 퀵
     - 계수
     - 정렬 라이브러리
-
+- [그리디](./greedy/greedy.md)
+- [구현](./implementation/implementation.md)
+- [스택/큐](./stacknqueue/stacknqueue.md)
+- dfs/bfs
+- 이진탐색
+- 다이나믹 프로그래밍
 ## 비교적 익숙한 것들
 
 - 문자열-
