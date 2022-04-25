@@ -34,7 +34,7 @@ public class Main {
         while (!pQ.isEmpty()) {
             Node now = pQ.poll();
 
-            if (answer[now.index] < now.cost) {
+            if (answer[now.index] < now.cost) { // 방문한 노드인 경우 continue 하도록 변경해도 동일하다.
                 continue;
             }
 
