@@ -20,7 +20,7 @@
 - [구현](./implementation/implementation.md)
 - [스택/큐](./stacknqueue/stacknqueue.md)
 - dfs/bfs
-- 이진탐색
+- [이진탐색](./binarysearch/binarysearch.md)
 - 다이나믹 프로그래밍
 ## 비교적 익숙한 것들
 
