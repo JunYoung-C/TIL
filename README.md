@@ -7,7 +7,7 @@
 - OOP
   - [좋은 객체 지향 설계의 5가지 원칙(SOLID)](./OOP/SOLID.md)
   - [객체 지향 프로그래밍](./OOP/객체%20지향%20프로그래밍.md)
-- [스프링](./Spring/스프링이란.md)
+- [스프링](./Spring/README.md)
 - 스프링 MVC
   - [웹 서버와 WAS](./Spring%20MVC/웹%20서버와%20WAS.md)
   - [서블릿](./Spring%20MVC/서블릿.md)
