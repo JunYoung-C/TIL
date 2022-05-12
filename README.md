@@ -12,7 +12,5 @@
   - [웹 서버와 WAS](./Spring%20MVC/웹%20서버와%20WAS.md)
   - [서블릿](./Spring%20MVC/서블릿.md)
   - [동시 요청 - 멀티 쓰레드](./Spring%20MVC/동시%20요청%20-%20멀티%20쓰레드.md)
-- HTTP
-  - [URI, URL, URN](./HTTP/URI,%20URL,%20URN.md)
-  - [인터넷 네트워크](./HTTP/인터넷%20네트워크.md)
-  - [웹 브라우저 요청 흐름](./HTTP/웹%20브라우저%20요청%20흐름.md)
+- [네트워크](./Network/README.md)
+
