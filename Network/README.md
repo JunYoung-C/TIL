@@ -1,21 +1,21 @@
 # Network
 
 ## 목차
-- [OSI 7계층 & TCP/IP 4계층](#OSI-7계층-&-TCP/IP-4계층)
-- [TCP/IP](#TCP/IP)
-- [IP(인터넷 프로토콜)](#IP(인터넷-프로토콜))
-- [TCP & UDP](#TCP-&-UDP)
-- [3-way handshake & 4-way handshake](#3-way-handshake-&-4-way-handshake)
+- [OSI 7계층 & TCP/IP 4계층](#osi-7계층--tcpip-4계층)
+- [TCP/IP](#tcpip)
+- [IP(인터넷 프로토콜)](#ip인터넷-프로토콜)
+- [TCP & UDP](#tcp--udp)
+- [3-way handshake & 4-way handshake](#3-way-handshake--4-way-handshake)
 - [PORT](#port)
-- [DNS](#DNS)
-- [URI, URL, URN](#URI,-URL,-URN)
+- [DNS](#dns)
+- [URI, URL, URN](#uri-url-urn)
 - [웹 브라우저 요청 흐름](#웹-브라우저-요청-흐름)
 - [HTTP](#http)
 ## 정리할 것들
-HTTP & HTTPS  
-HTTP GET과 POST 비교  
-쿠키와 세션의 차이  
-대칭키 & 공개키  
+- HTTP & HTTPS  
+- HTTP GET과 POST 비교  
+- 쿠키와 세션의 차이  
+- 대칭키 & 공개키  
 ---
 
 ## OSI 7계층 & TCP/IP 4계층
@@ -231,7 +231,7 @@ HTTP GET과 POST 비교
 
 ## 웹 브라우저 요청 흐름
 
-<img src="https://user-images.githubusercontent.com/87891581/168077028-da2d1d67-6b73-4a5f-a5c1-98d7c3c3da1c.png">
+<img src="https://user-images.githubusercontent.com/87891581/168077028-da2d1d67-6b73-4a5f-a5c1-98d7c3c3da1c.png" alt="이미지">
 
 1. 클라이언트가 도메인 명(ex. google.com)을 포함하는 URL로 요청한다.
 2. DNS 서버에서 도메인 명과 매칭과는 IP 주소를 찾는다.
