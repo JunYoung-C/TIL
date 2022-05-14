@@ -443,9 +443,11 @@
 
 ### 4. HTTP API 데이터 전송
 - HTTP를 사용해서 서로 정해둔 스펙으로 데이터를 주고 받으며 통신하는 것이다.
-- 웹 클라이언트는 자바스크립트로 통신한다.(AJAX)
+- `웹 클라이언트 - 서버`, `앱 클라이언트 - 서버`, `서버 - 서버`에서 사용한다.
+- 웹 클라이언트는 자바스크립트를 통해 통신한다.(AJAX)
 - GET, POST, PUT, PATCH, DELETE 모두 지원한다.
 - Content-Type은 주로 `application/json`을 사용한다.
+  - 주로 JSON 형식
 
 ## API
 - Application Programming Interface
