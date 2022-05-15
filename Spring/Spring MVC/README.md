@@ -12,6 +12,10 @@
 - [HTTP 응답 데이터를 만드는 방법](#http-응답-데이터를-만드는-방법)
 - [@Controller vs @RestController](#controller-vs-restController)
 - [HTTP 메시지 컨버터](#http-메시지-컨버터)
+- [Thymeleaf](#thymeleaf)
+- [메시지, 국제화](#메시지-국제화)
+- [BindingResult](#bindingresult)
+- [검증](#검증)
 
 ## 정리할 것들
 - Filter와 Interceptor 차이
@@ -291,3 +295,86 @@
 
 #### ReturnValueHandler
   - `ArgumentResolver`와 반대로, 응답 값을 변환하고 처리한다.
+
+## Thymeleaf
+- 타임리프는 백엔드 서버에서 HTML을 동적으로 렌더링 하는 용도로 사용하는 뷰 템플릿이다.
+- 타임리프는 스프링과 자연스럽게 통합되고, 스프링의 다양한 기능을 편리하게 사용할 수 있게 지원한다.
+  - 스프링 빈 호출 지원
+  - 편리한 폼 관리를 위한 추가 속성(`th:object`, `th:field`, `th:errors`, `th:errorclass`)
+  - checkbox, radio button 등을 편리하게 사용할 수 있는 기능 지원
+  - SpringEL 문법 통합
+  - 스프링의 메시지, 국제화 기능의 편리한 통합
+  - 스프링의 검증, 오류 처리 통합
+  - 스프링의 변환 서비스 통합
+- 타임리프는 순수 HTML을 그대로 유지하면서 뷰 템플릿도 사용할 수 있다.
+  - 이를 네츄럴 템플릿이라고 부른다.
+  - JSP를 포함함 다른 뷰 템플릿은 웹 브라우저에서 파일을 열면 정상적인 HTML 결과를 확인할 수 없다.
+  - 타임리프로 작성된 파일을 웹 브라우저에서 열면정상적인 HTML 결과를 확인할 수 있다. 
+
+## 메시지, 국제화
+### 메시지 
+- 화면을 구성하는 문자들을 하드코딩하지 않고, 한 곳에서 관리하도록 하는 기능을 메시지 기능이라고 한다.
+  - 하드코딩 : 상수나 변수에 들어가는 값을 소스코드에 직접 쓰는 방식
+- 메시지 관리 기능을 사용하려면, 스프링이 제공하는 `MessageSource`를 스프링 빈으로 등록해야 한다.
+  - 스프링 부트는 자동으로 등록해준다.
+  - 스프링 부트는 `messages.properties`가 기본 메시지 파일이다. 
+### 국제화 
+- 메시지 파일을 각 나라별로 별도로 관리하면 서비스를 국제화 할 수 있다.
+  - `messages_ko.properties`와 같이 언어에 맞는 메시지 파일을 생성하면 된다.
+- 어떤 나라에서 접근했는지 인식하는 방법은 `Accept-Language` 헤더 값을 사용하거나, 사용자가 직접 언어를 선택하도록 하고 쿠키 등을 사용해서 처리하면 된다.
+  - 스프링 부트는 `Accept-Language`로 인식하는 방법을 기본으로 지원한다.
+  - 스프링은 `Locale` 선택 방식을 변경할 수 있도록 `LocaleResolver`라는 인터페이스를 제공한다.
+
+## BindingResult
+- 스프링이 제공하는 검증 오류를 보관하는 객체이다.
+- 검증 오류가 발생하면 `BindingResult`에 보관하면 된다.
+- 타임리프는 스프링의 `BindingResult`를 활용해서 편리하게 검증 오류를 표현하는 기능을 제공한다.
+- `reject()`, `rejectValue()`, `Bean Validation`은 `MessageCodesResolver`로 메시지 코드를 생성하고, 매칭되는 오류 메시지를 찾는다.
+  - 없으면 기본값을 사용한다.
+
+### MessageCodesResolver
+- 검증 오류 코드로 메시지 코드들을 생성한다.
+  - 구체적인 것이 더 우선시된다.
+  - 덜 구체적인 것은 범용적으로 사용할 수 있다.
+- `MessageCodesResolver`는 인터페이스이고 `DefaultMessageCodesResolver`는 기본 구현체이다.
+
+### DefaultMessageCodesResolver의 기본 메시지 생성 규칙
+1. 객체 오류
+  1) code + "." + object name
+    - ex) `required.item`
+  2) code
+    - ex) `required`
+
+2. 필드 오류
+  1) code + "." + object name + "." + field
+    - ex) `typeMismatch.user.age`
+  2) code + "." + field
+  3) code + "." + field type
+    - ex) `typeMismatch.int`
+  4) code
+
+## 검증
+- HTTP 요청을 처리하기 전에, 요구사항에 맞는 요청인지 검증하는 작업이 필요하다.
+  - 스프링은 검증을 위해 `BindingResult` 객체를 지원한다.
+- 클라이언트 검증과 서버 검증을 둘 다 사용하되, 최종적으로 서버 검증은 필수이다.
+  - 클라이언트 검증은 조작할 수 있으므로 보안에 취약하다.
+  - 서버만으로 검증하면, 즉각적인 고객 사용성이 부족해진다.
+
+### 유의점
+- 폼 데이터는 `BindingResult`로 검증하고, API 데이터는 `@ControllerAdvice`로 예외처리한다.
+  - `@ModelAttribute`는 특정 필드가 바인딩 되지 않아도 나머지 필드는 정상 바인딩 되고, Validator를 사용한 검증도 적용할 수 있다.
+  - `@RequestBody`는 `HttpMessageConverter` 단게에서 JSON 데이터를 객체로 변경하지 못하면 예외가 발생하기 때문에, 컨트롤러가 호출되지 않고 Validator도 적용할 수 없다.
+- `BindingResult`는 검증할 대상 바로 다음에 와야한다.
+- `BindingResult`는 Model에 자동으로 포함된다.
+- 폼 데이터 전달을 위한 별도의 객체를 사용한다.
+  - ex) `Item` 대신 `ItemSaveForm` 사용
+  - 대부분의 경우 폼에서 전달하는 데이터와 도메인 객체가 딱 맞지 않기 때문에, Bean Validation의 `groups` 기능은 사용하지 않는다.
+  - 대신 변환 작업이 추가된다.
+ 
+### 검증 방법
+- 오브젝트 관련 오류는 `BindingResult`가 제공하는 `reject()`를 사용한다.
+  - Bean Validation의 `@ScriptAssert()`는 제약이 많고 복잡하다.
+- 필드는 `Bean Validation`으로 검증한다.
+  - Bean Validation은 검증 로직을 모든 프로젝트에 적용할 수 있도록 공통화하고, 표준화한 기술이다.
+  - 스프링 부트가 자동으로 Bean Validator를 글로벌 Validator로 등록해준다.
+
