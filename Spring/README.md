@@ -17,7 +17,6 @@
 - [Spring MVC](Spring%20MVC/README.md)
 - [로깅 라이브러리](#로깅-라이브러리)
 ## 정리할 것들
-- MVC 패턴이란
 - AOP(Aspect Oriented Programming)란
 - POJO
 - DAO와 DTO의 차이

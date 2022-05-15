@@ -8,7 +8,11 @@
 - [SSR & CSR](#ssr--csr)
 - [redirect vs forward](#redirect-vs-forward)
 - [Spring MVC](#spring-mvc)
+- [HTTP 요청 데이터 조회 방법](#http-요청-데이터-조회-방법)
+- [HTTP 응답 데이터를 만드는 방법](#http-응답-데이터를-만드는-방법)
 - [@Controller vs @RestController](#controller-vs-restController)
+- [HTTP 메시지 컨버터](#http-메시지-컨버터)
+
 ## 정리할 것들
 - Filter와 Interceptor 차이
 
@@ -195,8 +199,95 @@
 8. 뷰 렌더링 : 뷰에 Model을 보내고 렌더링한다.
 9. 완성된 뷰를 클라이언트에 보내서 화면에 출력한다.
 
+## HTTP 요청 데이터 조회 방법
+### 1. 쿼리 파라미터, HTML Form 데이터의 경우
+**1) `@RequestParam`**
+  - 요청 파라미터 조회에 사용된다.
+  - 쿼리 파라미터, HTML Form 방식 둘다 파라미터 형식이 같으므로 구분없이 사용한다.
+  - 파라미터 이름이 변수 이름과 같으면 name 속성은 생략해도 된다.
+  - defaultValue 속성은 빈 문자의 경우에도 설정한 기본값이 적용된다.
+  - 여러 파라미터를 조회할 수도 있다.
+    - Map : 파라미터 값이 1개가 확실하다면 사용
+    - MultiValueMap : 확실하지0 않을 경우 사용
+
+**2) `@ModelAttribute`**
+  - 객체 생성 후 요청 파라미터를 받아서 넣어주는 작업까지 해준다.
+    - setter로 값을 넣는다.
+  - 추가로 Model에 `@ModelAttribute`로 지정한 객체를 자동으로 넣어준다.
+    - 이름은 `@ModelAttribute`의 name 속성을 사용한다.
+    - name을 생략하면, 클래스 첫글자만 소문자로 변경해서 사용한다.
+
+### 2. HTTP message body 데이터의 경우
+- 주로 JSON 형식이며, HTML Form은 포함되지 않는다.
+- 스프링 MVC 내부에서 HTTP 메시지 바디를 읽어서 문자나 객체로 변환해서 전달해준다.
+  - `HttpMessageConverter` 사용
+
+**1) @RequestBody**
+- HTTP 메시지 바디 정보를 편리하게 조회할 수 있다.
+- JSON 요청 -> HTTP 메시지 컨버터 -> 객체
+  - `@ModelAttribute`와 유사한 방식으로 사용하면 된다.
+- 헤더 정보가 필요하다면 `RequestEntity`, `HttpEntity`, `@RequestHeader` 중에서 하나를 사용한다.
+- 생략 불가능하다.
+  - 생략 시 `@ModelAttribute`가 적용된다.
+
+## HTTP 응답 데이터를 만드는 방법
+### 1. 정적 리소스
+- 파일 변경 없이 그대로 제공한다.
+- HTML, css, js 등이 해당된다.
+- 스프링 부트는 클래스패스의 다음 디렉토리에 있는 정적 리소스를 제공한다.
+  - `/static`, `/public`, `/resources`, `/META-INF/resources`
+  - `src/main/resources/static/basic/hello.html`의 경우 `localhost:8080/basic/hello.html`로 요청한다.
+
+### 2. 뷰 템플릿 사용
+- 뷰 템플릿을 거쳐 HTML이 생성되고, 뷰가 응답을 만들어서 전달한다.
+- 주로 HTML를 동적으로 생성하는 용도로 사용되며, 다른 것들도 가능하다.
+- String을 반환하는 경우 `@ResponseBody`가 없다면, 뷰 리졸버가 실행되어서 뷰를 찾고 렌더링 한다.
+- Void를 사용하는 경우 `@Controller`를 사용하고 HTTP 메시지 바디를 처리하는 파라미터가 없으면, 요청 URL을 참고해서 논리 뷰 이름으로 사용한다.
+  - 권장하지 않는다.
+
+### 3. HTTP 메시지 사용
+> - HTML이나 뷰 템플릿을 사용해도 HTTP 응답 메시지 바디에 HTML 데이터가 담겨서 전달된다. 
+
+- HTTP API를 제공하는 경우에는 데이터를 전달해야 한다.
+  - HTTP 메시지 바디에 JSON과 같은 형식으로 데이터를 실어 보낸다.
+
+**1) `@Responsebody`**
+- `viewResolver` 대신, `HttpMessageConverter`가 동작하게 되어 HTTP message body에 직접 데이터가 입력된다.
+- HTTP 응답 코드를 설정하려면, `ResponseEntity`를 사용하거나 `@ResponseStatus`를 붙여준다.
+  - 조건에 따라 동적으로 변경하려면, `ResponseEntity`를 사용한다.
+- 객체 -> HTTP 메시지 컨버터 -> JSON 요청
+
 ## @Controller vs @RestController
 - `@Controller`는 반환 값이 String이면 뷰 이름으로 인식된다. 그래서 뷰를 찾고 뷰가 렌더링된다.
-- `@RestController`는 `@ResponseBody`와 `@Controller`가 결합되었다.
+- `@RestController`는 `@ResponseBody`와 `@Controller`가 적용된 애노테이션이다.
 - `@RestController`는 반환값으로 뷰를 찾는 것이 아니라, HTTP 메시지 바디에 바로 입력한다.
-  - 따라서 실행 결과로 ok 메세지를 받을 수 있다.
+
+## HTTP 메시지 컨버터
+- 문자나 객체 등의 데이터를 JSON으로 변환하는 작업을 한다.
+  - `StringHttpMessageConver` : String 문자를 처리한다. 
+  - `MappingJackson2HttpMessageConverter` : 객체나 HashMap을 처리한다. 요청 응답 둘 다 application/json
+- 스프링 MVC는 다음의 경우에 HTTP 메시지 컨버터를 적용한다.
+  - HTTP 요청 : `@RequestBody`, `HttpEntity(or RequestEntity)`
+  - HTTP 응답 : `@ResponseBody`, `HttpEntity(or ResponseEntity)`
+
+### HTTP 요청 데이터를 읽는 과정
+1.`@RequestBody`나 `HttpEntity`를 사용하는 컨트롤러로 HTTP 요청이 들어온다.
+2. 메시지 컨버터가 대상 클래스 타입과 `Content-Type`을 확인한다.
+3. 조건을 만족하면, 데이터를 자바 코드로 변환한다.
+
+### HTTP 응답 데이터를 생성하는 과정
+1. 컨트롤러가 `@ResponseBody`나 `HttpEntity`를 사용한다.
+2. 메시지 컨버터가 대상 클래스 타입과 HTTP 요청의 Accept 미디어 타입을 확인한다.
+3. 조건을 만족하면, HTTP 응답 메시지 바디에 데이터를 생성한다.
+
+### HTTP 메시지 컨버터 위치
+![image](https://user-images.githubusercontent.com/87891581/168459636-bcea8712-e789-48db-917f-8c954d2ca610.png)
+- 요청의 경우 : `@RequestBody`나 `HttpEntity`를 처리하는 `ArgumentResolver`가 HTTP 메시지 컨버터를 호출해서 필요한 객체를 생성한다.
+- 응답의 경우 : `@ResponseBody`나 `HttpEntity`를 처리하는 `ReturnValueHandler`가 HTTP 메시지 컨버터를 호출해서 응답 결과를 만든다. 
+#### ArgumentResolver
+  - 애노테이션 기반의 컨트롤러는 매우 다양한 파라미터를 사용할 수 있다.
+  - `ArgumentResolver`가 컨트롤러(핸들러)가 필요로 하는 다양한 파라미터의 값(객체)를 생성하고, 호출할 때 넘겨준다.
+  - 필요하다면 직접 만들 수 있다.
+
+#### ReturnValueHandler
+  - `ArgumentResolver`와 반대로, 응답 값을 변환하고 처리한다.
