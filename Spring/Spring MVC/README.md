@@ -7,7 +7,7 @@
 - [동시 요청 - 멀티 쓰레드](#동시-요청---멀티-쓰레드)
 - [SSR & CSR](#ssr--csr)
 - [redirect vs forward](#redirect-vs-forward)
-- [Spring MVC](#spring-mvc)
+- [Spring MVC](#spring-mvc-1)
 - [HTTP 요청 데이터 조회 방법](#http-요청-데이터-조회-방법)
 - [HTTP 응답 데이터를 만드는 방법](#http-응답-데이터를-만드는-방법)
 - [@Controller vs @RestController](#controller-vs-restController)
@@ -35,8 +35,7 @@
 
 - HTTP 기반으로 동작
 - 프로그램 코드를 실행해서 애플리케이션 로직 수행
-    - 동적 HTML, HTTP API(JSON)
-    - 서블릿, JSP, 스프링 MVC
+    - 동적 HTML, HTTP API(JSON) 제공
 - 웹 서버 기능 포함
 - 예) 톰캣, Jetty, Undertow
 
@@ -226,7 +225,7 @@
 - 스프링 MVC 내부에서 HTTP 메시지 바디를 읽어서 문자나 객체로 변환해서 전달해준다.
   - `HttpMessageConverter` 사용
 
-**1) @RequestBody**
+**1) `@RequestBody`**
 - HTTP 메시지 바디 정보를 편리하게 조회할 수 있다.
 - JSON 요청 -> HTTP 메시지 컨버터 -> 객체
   - `@ModelAttribute`와 유사한 방식으로 사용하면 된다.
@@ -275,7 +274,7 @@
   - HTTP 응답 : `@ResponseBody`, `HttpEntity(or ResponseEntity)`
 
 ### HTTP 요청 데이터를 읽는 과정
-1.`@RequestBody`나 `HttpEntity`를 사용하는 컨트롤러로 HTTP 요청이 들어온다.
+1. `@RequestBody`나 `HttpEntity`를 사용하는 컨트롤러로 HTTP 요청이 들어온다.
 2. 메시지 컨버터가 대상 클래스 타입과 `Content-Type`을 확인한다.
 3. 조건을 만족하면, 데이터를 자바 코드로 변환한다.
 
@@ -291,7 +290,7 @@
 #### ArgumentResolver
   - 애노테이션 기반의 컨트롤러는 매우 다양한 파라미터를 사용할 수 있다.
   - `ArgumentResolver`가 컨트롤러(핸들러)가 필요로 하는 다양한 파라미터의 값(객체)를 생성하고, 호출할 때 넘겨준다.
-  - 필요하다면 직접 만들 수 있다.
+  - 직접 구현한 argumentResolver를, `WebMvcConfigurer`가 제공하는 `addArgumentResolvers()`로 등록할 수 있다.
 
 #### ReturnValueHandler
   - `ArgumentResolver`와 반대로, 응답 값을 변환하고 처리한다.
@@ -378,3 +377,41 @@
   - Bean Validation은 검증 로직을 모든 프로젝트에 적용할 수 있도록 공통화하고, 표준화한 기술이다.
   - 스프링 부트가 자동으로 Bean Validator를 글로벌 Validator로 등록해준다.
 
+## 필터 & 인터셉터
+- 애플리케이션 여러 로직에서 공통으로 관심이 있는 것을 공통 관심사라고 한다.
+  - ex) 여러 컨트롤러에서 로그인 여부 확인 필요
+- 공통 관심사는 스프링의 AOP로 해결할 수 있지만, 웹과 관련된 공통 관심사는 서블릿 필터 또는 스프링 인터셉터를 사용하는 것이 좋다.
+  - 웹과 관련된 공통 관심사를 처리할 때는 HTTP의 헤더나 URL의 정보들이 필요하다.
+  - 인터셉터는 스프링 MVC 구조에 특화된 필터 기능을 제공하므로, 일반적으로는 인터셉터를 사용하는 것이 더 편리하다.
+
+### 1. 필터
+- 서블릿에 요청이 전달되기 전/후에 url 패턴에 맞는 모든 요청에 대해 부가 작업을 처리할 수 있는 기능을 제공한다.
+  - 스프링의 경우 서블릿은 디스패쳐 서블릿이 해당된다.
+- 스프링 부트를 사용한다면, `FilterRegistrationBean`로 필터를 등록할 수 있다.
+  - `ServletComponentScan`, `@WebFilter`는 필터 순서 조절이 안된다.
+  - 서블릿 컨테이너가 필터를 싱글톤 객체로 생성하고, 관리한다.
+- 다음 필터나 서블릿을 호출할 때 `request`, `response`를 다른 객체로 만들어 넘길 수 있다.
+
+#### 필터 흐름
+- 필터 흐름 : `HTTP 요청 -> WAS -> 필터 -> 서블릿 -> 인터셉터 -> 컨트롤러`
+  1. 서블릿 컨테이너가 생성될 때 `init()`가 호출된다.
+  2. 고객의 요청이 올 때마다 `doFilter()`메서드가 호출된다.
+  3. 필터는 체인처럼 여러개로 추가할 수 있으며, 다음 필터가 없다면 서블릿을 호출한다.
+    - 적절하지 않는 요청이라고 판단되면, 서블릿이 호출되지 않는다.
+  4. 이후 서블릿 컨테이너가 종료될 때 `destroy()`가 호출된다.
+
+### 2. 인터셉터
+- 스프링 MVC가 제공하는 기능으로, 디스패쳐 서블릿이 컨트롤러를 호출하기 전/후와 요청 완료 후에 추가적인 작업을 할 수 있도록 기능을 제공한다.
+- 인터셉터는 `request`, `response` 뿐만 아니라, 어떤 컨트롤러가 호출되는지와 어떤 `modelAndView`가 반환되는지 알 수 있다. 
+- `WebMvcConfigurer`가 제공하는 `addInterceptors()`로 인터셉터를 등록할 수 있다.
+  - 싱글톤처럼 사용되기 때문에 멤버변수를 사용하면 위험하다.
+- [URL 경로 공식 문서](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/util/pattern/PathPattern.html)
+
+#### 인터셉터 흐름
+![image](https://user-images.githubusercontent.com/87891581/168583864-9db2087c-cf50-4516-b766-9dd181573cb0.png)
+1. HTTP 요청이 들어오면, 디스패쳐 서블릿을 거쳐 `preHandle()`이 호출된다.
+   - `preHandle()`의 응답값이 true면 다음으로 진행하고, false면 더이상 진행되지 않는다.
+2. 컨트롤러를 거쳐 내부 로직 수행 후 `postHandle()`이 호출된다.
+   - 컨트롤러에서 예외가 발생하면 `postHandle()`은 호출되지 않는다.
+3. 뷰가 렌더링 된 후 `afterCompletion()`이 호출된다.
+   - `afterCompletion()`은 예외가 발생하더라도 항상 호출된다.
