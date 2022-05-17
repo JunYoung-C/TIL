@@ -16,9 +16,11 @@
 - [메시지, 국제화](#메시지-국제화)
 - [BindingResult](#bindingresult)
 - [검증](#검증)
-
-## 정리할 것들
-- Filter와 Interceptor 차이
+- [필터 & 인터셉터](#필터--인터셉터)
+- [예외 처리와 오류 페이지](#예외-처리와-오류-페이지)
+- [API 예외 처리](#api-예외-처리)
+- [컨버터 & 포맷터](#컨버터--포맷터)
+- [파일 업로드](#파일-업로드)
 
 ---
 
@@ -360,7 +362,7 @@
   - 서버만으로 검증하면, 즉각적인 고객 사용성이 부족해진다.
 
 ### 유의점
-- 폼 데이터는 `BindingResult`로 검증하고, API 데이터는 `@ControllerAdvice`로 예외처리한다.
+- 폼 데이터는 `BindingResult`로 검증하고, API 데이터는 예외를 직접 던져서 `@ExceptionHandler`로 처리한다.
   - `@ModelAttribute`는 특정 필드가 바인딩 되지 않아도 나머지 필드는 정상 바인딩 되고, Validator를 사용한 검증도 적용할 수 있다.
   - `@RequestBody`는 `HttpMessageConverter` 단게에서 JSON 데이터를 객체로 변경하지 못하면 예외가 발생하기 때문에, 컨트롤러가 호출되지 않고 Validator도 적용할 수 없다.
 - `BindingResult`는 검증할 대상 바로 다음에 와야한다.
@@ -415,3 +417,133 @@
    - 컨트롤러에서 예외가 발생하면 `postHandle()`은 호출되지 않는다.
 3. 뷰가 렌더링 된 후 `afterCompletion()`이 호출된다.
    - `afterCompletion()`은 예외가 발생하더라도 항상 호출된다.
+
+## 예외 처리와 오류 페이지
+- 스프링 부트를 사용한다면 오류 페이지를 적절한 경로에 추가만 하면 된다.
+### 서블릿 예외처리
+- 서블릿은 다음 2가지 방식으로 예외 처리를 지원한다.
+  1. `Exception`
+     - `WAS(여기까지 전파) <- 필터 <- 서블릿 <- 인터셉터 <- 컨트롤러(예외 발생)`
+     - 애플리케이션에서 발생한 예외를 잡지 못해서 WAS까지 예외가 올라온다면, WAS가 기본으로 제공하는 오류 페이지를 볼 수 있다.
+  2. `response.sendError(http 상태 코드, 오류 메시지)`
+     - HTTP 상태 코드와 오류 메시지를 추가할 수 있다.
+     - `WAS(sendError 호출 기록 확인) <- 필터 <- 서블릿 <- 인터셉터 <- 컨트롤러(sendError() 호출)`
+     - 당장 예외가 발생하지는 않지만, 서블릿 컨테이너에게 오류가 발생했다는 점을 전달한다.
+- 기본 오류 페이지 대신, 다른 오류 페이지를 등록해서 사용할 수 있다.
+  - `WebServerFactoryCustomizer`의 `customize()`를 오버라이딩해서, 예외 종류에 따라 `ErrorPage` 등록
+  - 예외 처리용 컨트롤러 필요
+
+#### 예외 발생과 오류 페이지 요청 흐름
+> 클라이언트는 서버 내부에서 이런 일이 일어나는지 전혀 알지 못한다. 오직 서버 내부에서 오류 페이지를 찾기 위해 추가적인 호출을 한다.
+
+```
+1. WAS(클라이언트 요청, dispatcherType = REQUEST) -> 필터 -> 서블릿 -> 인터셉터 -> 컨트롤러
+2. WAS <- 필터 <- 서블릿 <- 인터셉터 <- 컨트롤러(예외 발생 or sendError 호출)
+2. WAS(에러 페이지 요청, dispatcherType = ERROR) -> 필터(X) -> 서블릿 -> 인터셉터(X) -> 컨트롤러 -> View(에러 페이지)
+```
+- 예외가 WAS까지 전달되면, WAS는 오류 페이지 경로를 찾아서 내부에서 오류 페이지를 호출한다. 
+   - WAS는 오류 정보를 `request`의 `attribute`에 추가해서 넘겨준다.
+- 오류 페이지 경로로 필터, 서블릿, 인터셉터, 컨트롤러가 모두 다시 호출된다.
+  - `DispatcherType(forward, include, request, async, error)`에 따라 필터 적용 여부를 설정할 수 있다.
+  - 인터셉터는 서블릿이 아니라 스프링이 제공하는 기능이기 때문에, 적용 여부를 `excludePathPatterns`로 설정하면 된다.
+
+### 스프링 부트와 오류 페이지
+- 서블릿에서 예외 처리 페이지를 등록하기 위해서는 복잡한 과정을 거쳐야한다. 
+- 스프링 부트는 이런 과정을 기본으로 제공하기 때문에, 개발자는 오류 페이지 파일을 추가만 하면 된다.
+  - `/error` 경로에 에러 페이지를 추가하면, 자동으로 등록된다.
+  - `BasicController`라는 예외 처리 컨트롤러가 자동으로 등록된다.
+    - `BasicController`는 예외 정보를 model에 담아서 뷰로 전달한다.
+    - `BasicController`는 `text/html` 이외의 요청의 경우 응답을 JSON으로 반환한다.
+
+#### BasicController의 뷰 선택 우선순위
+1. 뷰 템플릿
+   - `resources/templates/error/500.html` : 구체적인 것이 우선순위가 더 높다.
+   - `resources/templates/error/5xx.html`
+2. 정적 리소스(static, public)
+   - `resources/static/error/404.html`
+   - `resources/static/error/4xx.html`
+3. 적용 대상이 없을 때 뷰 이름(error)
+   - `resources/template/error.html`
+
+## API 예외 처리
+- HTMl 페이지의 경우 4xx, 5xx와 같은 오류 페이지만 있으면, 대부분의 문제를 해결할 수 있다. 
+- API는 각 오류 상황에 맞는 오류 응답 스펙을 정하고, JSON으로 데이터를 내려주어야 한다.
+  - `BasicErrorController`를 확장해서 JSON 오류 메시지를 변경할 수 있다.
+  - 하지만 `@ExceptionHandler`와 `@ControllerAdvice`를 사용하면 예외를 훨씬 깔끔하게 처리할 수 있다.
+
+### 스프링 MVC와 API 예외처리
+![image](https://user-images.githubusercontent.com/87891581/168731890-ab3c4b86-8dd9-4141-bc90-b24dd40c3068.png)
+- 스프링 MVC는 컨트롤러(핸들러) 밖으로 던저진 예외를 해결하고, 동작 방식을 변경할 수 있도록 `ExceptionResolver`를 제공한다.
+  - 컨트롤러에서 예외가 발생하면 `postHandle()`이 호출되지 않고, `ExceptionResolver`가 호출된다.
+- 예외가 발생해도 서블릿 컨테이너까지 예외가 전달되지 않고, 스프링 MVC에서 예외 처리는 끝이난다.
+  - 결과적으로 WAS 입장에서는 정상 처리가 되었다.
+
+#### `ExceptionResolver` 종류
+1. `ExceptionHandlerExceptionResolver`
+   - 예외가 발생하면 `@ExceptionHandler`가 달린 메서드가 호출된다.  
+   - `@ExceptionHandler`에 지정한 클래스부터 자식 클래스까지 처리할 수 있다.
+     - `부모예외처리()`와 `자식예외처리()`가 공존하는 경우 더 자세한 `자식예외처리()`가 우선권을 가진다.
+     - 클래스 지정을 생략하면, 메서드 파라미터의 예외가 지정된다.
+   - html, api 응답 둘 다 가능하다.
+   - `@ControllerAdvice` 또는 `@RestController`를 사용하여 예외 처리 로직을 분리할 수 있다.
+     - 예외 처리할 컨트롤러를 다양한 방법으로 지정할 수 있다.
+     - 지정하지 않으면 모든 컨트롤러에 적용된다.
+2. `ResponseStatusExceptionResolver`
+   - `@ResponseStatus`가 달려있는 예외나 `ResponseStatusException` 예외를 처리한다.
+     - 상태코드와 메시지를 변경할 수 있다.
+   - 코드를 수정할 수 없는 라이브러리나 동적인 처리에 `ResponseStatusException`를 사용한다.
+3. `DefaultHandlerExceptionResolver`
+   - 스프링 내부에서 발생하는 스프링 예외를 해결한다.
+   - ex) `TypeMismatchException` 예외가 발생하면, HTTP 상태코드 400 오류 발생
+   - 상속해서 예외 메시지를 변경할 수 있지만, `@ExceptionHandler`를 사용하자
+
+## 컨버터 & 포맷터
+### 1. 컨버터
+- 문자를 숫자로 변환하거나, 객체를 문자로 변환하는 등 타입을 변환하는 기능을 제공한다.
+- 스프링의 타입 변환 적용 예
+  - 스프링 MVC 요청 파라미터(`@RequestParam`, `@ModelAttribute`, `@PathVariable`)
+  - `@Value` 등으로 YML 정보 읽기
+  - XML에 넣은 스프링 빈 정보를 변환
+  - 뷰를 렌더링 할 때
+- 스프링은 개발 컨버터를 모아두고 그것들을 묶어서 편하게 사용할 수 있도록 하는 `ConversionService`를 제공한다.
+- 스프링에 추가적인 타입 변환이 필요하다면, `Converter` 인터페이스를 구현한 다음에 `WebMvcConfigurer`가 제공하는 `addFormatters()`로 등록하면 된다.
+  - 스프링 내부에서 사용하는 `ConversionService`에 컨버터가 추가된다.
+  - `org.springframework.core.convert.converter.Converter`
+  - `Converter` 외에도 다양한 방식의 컨버터를 제공한다.
+  - 추가한 컨버터가 기본 컨버터보다 높은 우선순위를 가진다.
+- 타임리프의 경우 `${{...}}`를 사용하면, 자동으로 컨버전 서비스를 사용해서 변환된 결과를 출력해준다.
+  - `th:field`도 자동으로 컨버전 서비스를 적용해준다.
+
+### 2. 포맷터
+- 포맷터는 객체를 문자로 변경하고, 문자를 객체로 변경하는 기능을 수행한다.
+- 컨버터와 동일한 방식으로 포맷터를 등록할 수 있다.
+  - 포맷터는 문자에 특화된 컨버터일 뿐이다.
+  - `${{...}}`도 사용할 수 있다.
+  - 우선순위는 컨버터가 더 높다.
+- 스프링은 날짜와 숫자를 애노테이션 기반으로 원하는 형식을 지정해서 사용할 수 있는 포맷터를 제공한다.  
+  - `@NumberFormat` : 숫자 관련 형식 지정 포맷터 사용
+  - `@DateTimeFormat` : 날짜 관련 형식 지정 포맷터 사용
+- `HttpMessageConverter`에는 컨버전 서비스가 적용되지 않는다.
+  - `HttpMessageConverter`의 역할은 HTTP 메시지 바디의 내용을 객체로 변환하거나 객체를 HTTP 메시지 바디에 입력하는 것이다.
+  - `HttpMessageConverter` 내부에서 사용되는 라이브러리가 변환 작업을 진행한다. 이는 컨버전 서비스와 관계 없다. 
+  - `ArgumentResolver`는 컨버전 서비스를 사용해서 타입을 변환한다.
+
+### 3. 차이점
+- `Converter`는 입력과 출력 타입에 제한이 없는, 범용 타입 변환 기능을 제공한다.
+- `Formatter`는 문자를 다른 객체로 변환하거나 객체를 문자로 변환하는 기능을 제공한다.
+  - 즉, 문자에 특화된 컨버터이다.
+  - `Locale` 현지화 정보가 사용될 수 있다.
+
+## 파일 업로드
+- `multipart/form-data`방식은 다른 종류의 여러 파일과 폼의 내용을 함께 전송할 수 있다.
+  - 일반적인 폼 데이터는 문자 형식, 파일은 바이너리 형식이다.
+- 스프링이 지원하는 `MultipartFile`로 `multipart/form-data` 방식의 폼 데이터를 효과적으로 처리할 수 있다. 
+  - 업로드하는 HTML Form의 name에 맞추어 `@RequestParam`을 적용하거나, `@ModelAttribute`를 사용해도 된다. 
+  - 서블릿이 제공하는 `Part`는 `HttpServletRequest`를 사용해야 하고, 추가로 파일 부분만 구분하려면 여러가지 코드를 넣어야 한다.
+
+### 유의점
+- 큰 파일을 무제한 업로드하게 둘 수 없으므로 업로드 사이즈를 제한할 수 있다.
+  - `max-file-size` : 파일 하나의 최대 사이즈, 기본 1MB
+  - `max-request-size` : 전체 파일 용량의 최대 사이즈, 기본 10MB
+- 고객이 업로드한 파일명으로 서버 내부에 파일을 저장하면 안된다.
+  - 서버에서는 저장할 파일명이 겹치지 않도록 내부에서 관리하는 별도의 파일명이 필요하다.
