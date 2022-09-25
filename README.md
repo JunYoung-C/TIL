@@ -4,14 +4,14 @@
 ## 목차
 - [코딩테스트](./coding-test/coding_test.md)
 - [OOP](./OOP/README.md)
-- JAVA
-- [Spring](./Spring/README.md)
-- [JPA](./JPA/README.md)
-- 운영체제
+- [JAVA]()
+- [Spring](Spring/README.md)
+- [JPA](JPA/README.md)
+- [운영체제]()
 - [네트워크](./Network/README.md)
-- 데이터베이스
-- 알고리즘
-- 자료구조
+- [데이터베이스](Database/README.md)
+- [알고리즘]()
+- [자료구조]()
 
 [//]: # (## JAVA)
 
