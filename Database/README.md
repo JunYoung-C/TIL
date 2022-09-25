@@ -21,6 +21,8 @@
 - 정규화
 - 반정규화
 
+---
+
 ### DB
 <details>
    <summary>답안 보기</summary>
