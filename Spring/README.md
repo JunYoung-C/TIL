@@ -1,29 +1,11 @@
 # Spring
-- 프레임워크와 라이브러리
-- EJB와 POJO
-- Spring 정의 및 장점
-- 스프링 부트란
-- IoC
-- DI (Dependency Injection)
-  - 주입 방식
-- 스프링 컨테이너
-- 스프링이 싱글톤을 지원하는 이유
-- @Configuration과 싱글톤
-- 빈이란
-  - 생명주기
-  - 생명주기 콜백 지원 방법
-  - 스코프
-- Entity, VO, DTO, DAO
 
 빈 후처리기
 AOP
 디자인 패턴
 로깅 라이브러리
 
-- 웹 서버와 웹 애플리케이션 서버
-- 서블릿
-- 서블릿 컨테이너
-- MVC 패턴
+
 - AOP(Aspect Oriented Programming)
 - Filter vs Interceptor
 - AOP vs Interceptor
@@ -51,45 +33,43 @@ DDD 구조
 
 ---
 
-### 프레임워크와 라이브러리
 <details>
-   <summary>답안 보기</summary>
+   <summary>프레임워크와 라이브러리</summary>
 
 - 프레임워크 : 원하는 기능 구현에 집중하여 개발할 수 있도록, 일정한 형태와 필요한 기능을 갖추고 있는 골격, 뼈대를 의미한다.
 - 라이브러리 : 자주 사용되는 로직을, 재사용이 편리하도록 잘 정리한 코드의 집합을 말한다.
 - 프레임워크는 사용자가 작성한 코드를 프레임워크가 직접 제어하고, 대신 실행한다. 하지만 라이브러리는 사용자가 작성한 코드가 직접 제어의 흐름을 담당한다.
 
-</details>
-
 ---
 
-### EJB
+</details>
+
+
 <details>
-   <summary>답안 보기</summary>
+   <summary>EJB</summary>
 
 - Enterprise JavaBeans
 - 기업 환경의 시스템을 구현하기 위한 서버측 컴포넌트 모델이다.
 - 복잡하고 객체지향적이지 않다는 단점 등으로 인해 스프링이 등장하였다.
 
-</details>
-
 ---
 
-### POJO
+</details>
+
 <details>
-   <summary>답안 보기</summary>
+   <summary>POJO</summary>
 
 - Plain Old Java Object
 - 특정 기술 규약과 환경에 종속되지 않은 순수한 자바 오브젝트를 말한다.
 - 코드가 간결하고 테스트가 용이하다는 장점이 있다.
 
-</details>
-
 ---
 
-### Spring이란
+</details>
+
+
 <details>
-   <summary>답안 보기</summary>
+   <summary>Spring이란</summary>
 
 - 자바 엔터프라이즈 개발을 편하게 해주는 경량급 오픈소스 애플리케이션 프레임워크이다.
 - 특징
@@ -98,46 +78,42 @@ DDD 구조
   - AOP를 지원하여 개발자가 핵심 비즈니스 로직에 집중할 수 있도록 한다.
   - MVC 구조를 웹을 개발할 수 있도록 지원한다.
 
-</details>
-
 ---
 
-### 스프링 부트란
+</details>
+
 <details>
-   <summary>답안 보기</summary>
+   <summary>스프링 부트란</summary>
 
 - 스프링을 복잡한 설정 없이 쉽고 빠르게 만들어주는 프레임워크이다.
 
-</details>
-
 ---
 
-### IoC
+</details>
+
 <details>
-   <summary>답안 보기</summary>
+   <summary>IoC</summary>
 
 - Inversion Of Control, 제어의 역전
 - 객체의 생성에서부터 생명주기의 관리까지 모든 객체에 대한 제어권이 바뀐 것을 말한다.
 - 개발자가 프레임워크에 필요한 부분을 개발하고 조립하면, 코드의 최종 호출은 프레임워크에 의해 이뤄진다. 
 
-</details>
-
 ---
 
-### DI (Dependency Injection)
+</details>
+
 <details>
-   <summary>답안 보기</summary>
+   <summary>DI (Dependency Injection)</summary>
 
 - Dependency Injection, 의존관계 주입 or 의존성 주입
 - Spring 프레임워크에서 지원하는 IoC의 형태로, 클래스 사이의 의존관계를 빈 설정 정보를 바탕으로 컨테이너가 연결해 주는 것을 말한다.
 
-</details>
-
 ---
 
-### DI 주입 방식
+</details>
+
 <details>
-   <summary>답안 보기</summary>
+   <summary>DI 주입 방식</summary>
 
 1. 생성자 주입
    - 생성자를 통해서 의존관계를 주입받는 방법
@@ -154,71 +130,65 @@ DDD 구조
 4. 일반 메서드 주입
    - 일반 메서드를 통해서 의존관계를 주입받는 방법으로, 잘 사용하지 않는다.
 
-</details>
-
 ---
 
-### 스프링 컨테이너
+</details>
+
 <details>
-   <summary>답안 보기</summary>
+   <summary>스프링 컨테이너</summary>
 
 - BeanFactory와 ApplicationContext를 스프링 컨테이너라고 한다.
   - BeanFactory는 빈을 관리하고 조회하는 역할을 한다.
   - BeanFactory를 상속한 ApplicationContext는 빈 관리 기능뿐만 아니라, 국제화 등의 추가적인 기능을 제공한다.
 
-</details>
-
 ---
 
-### 스프링이 싱글톤을 지원하는 이유
+</details>
+
 <details>
-   <summary>답안 보기</summary>
+   <summary>스프링이 싱글톤을 지원하는 이유</summary>
 
 - 대부분의 스프링 애플리케이션은 웹 애플리케이션이다. 웹 애플리케이션은 보통 여러 고객이 여러 요청을 한다.
 - 싱글톤을 사용하지 않으면 각 요청마다 새로운 객체가 생성되고 소멸된다. 이 방식은 트래픽이 증가할수록 메모리 낭비가 심하기 때문에, 객체를 1개만 생성하고 공유하는 싱글톤 패턴을 사용한다.
 
-</details>
-
 ---
 
-### @Configuration과 싱글톤
+</details>
+
 <details>
-   <summary>답안 보기</summary>
+   <summary>@Configuration과 싱글톤</summary>
 
 - `@Configuration`는 `@Bean`이 붙은 메서드마다 이미 스프링 빈이 존재하면 존재하는 빈을 반환하고, 스프링 빈이 없으면 생성해서 스프링 빈으로 등록하고 반환하는 코드가 동적으로 만들어진다.
   - `@Bean`만 사용해도 스프링 빈으로 등록되지만, 싱글톤을 보장하지 않는다.
   - `@Configuration`이 붙은 클래스도 스프링 빈으로 등록된다.
 
-</details>
-
 ---
 
-### 빈이란
+</details>
+
 <details>
-   <summary>답안 보기</summary>
+   <summary>빈이란</summary>
 
 - 스프링 컨테이너가 생성하고 관리하는 자바 객체를 빈이라고 한다.
 - `@Bean`나 `<bean>`로 설정 파일에 빈을 직접 등록하거나, 컴포너트 스캔을 이용하여 자동으로 등록할 수 있다.
 
-</details>
-
 ---
 
-### 빈의 생명주기
+</details>
+
 <details>
-   <summary>답안 보기</summary>
+   <summary>빈의 생명주기</summary>
 
 - 스프링 컨테이너 생성 -> 스프링 빈 생성 -> 의존관계 주입 -> 초기화 콜백 -> 사용 -> 소멸전 콜백 -> 스프링 종료
     - 초기화 콜백 : 빈 생성과 의존관계 주입이 완료된 후 호출
     - 소멸전 콜백 : 빈이 소멸되기 직전에 호출
 
-</details>
-
 ---
 
-### 빈 생명주기 콜백 지원 방법
+</details>
+
 <details>
-   <summary>답안 보기</summary>
+   <summary>빈 생명주기 콜백 지원 방법</summary>
 
 - 스프링은 빈의 생성과 의존관계 주입이 완료되면 초기화 콜백이 발생한다. 또한, 싱글톤 빈은 스프링 컨테이너가 종료되기 직전에 소멸 콜백이 발생한다.
 - 스프링은 인터페이스를 구현하는 방법, 설정 정보에서 빈 속성을 사용하는 방법, 애노테이션을 사용하는 방법으로 빈 생명주기 콜백을 지원한다.
@@ -233,13 +203,12 @@ DDD 구조
      - 메서드에 `@PreDestroy`를 붙여서 소멸을 지원한다.
 - 애노테이션을 사용하는 것을 권장하며, 외부 라이브러리를 초기화나 종료해야 하는 경우 설정 정보에서 빈 속성을 사용한다.
 
-</details>
-
 ---
 
-### 빈 스코프
+</details>
+
 <details>
-   <summary>답안 보기</summary>
+   <summary>빈 스코프</summary>
 
 - 빈이 존재할 수 있는 범위를 의미하며, 스프링은 다양한 스코프를 지원한다.
 1. 싱글톤
@@ -255,99 +224,144 @@ DDD 구조
    - websocket : 웹 소켓과 동일한 생명주기를 가지는 스코프
      - 웹 소켓 : 클라이언트와 서버가 양방향 소통을 가능하게 하는 프로토콜
 
-</details>
-
 ---
 
-### Entity, VO, DTO, DAO
+</details>
+
 <details>
-   <summary>답안 보기</summary>
+   <summary>웹 서버와 웹 애플리케이션 서버</summary>
 
+![image](https://user-images.githubusercontent.com/87891581/192721935-a350c793-4754-43f8-832b-b6bcbfc76f46.png)
 
+**1. 웹 서버(Web Server)**
+- 클라이언트가 요청하는 정적 리소스를 제공한다.
+    - 정적 리소스 : 정적(파일) HTML, CSS, JS, 이미지, 영상
+- 예) NGINX, APACHE
 
-</details>
+**2. 웹 애플리케이션 서버(WAS, Web Application Server)**
+
+- 프로그램 코드를 실행해서 애플리케이션 로직 수행
+    - 동적 HTML, HTTP API(JSON) 제공
+- 웹 서버 기능 포함
+- 예) 톰캣, Jetty, Undertow
+
+**3. 차이점**
+- 웹 서버는 정적 리소스(파일)를 제공하고, WAS는 애플리케이션 로직을 수행한다.
+- WAS도 웹 서버 기능을 제공할 수 있기 때문에 웹 서버 없이 WAS와 DB 만으로도 시스템 구성이 가능하다. 하지만 애플리케이션 로직이 정적 리소스 때문에 수행이 어려울 수 있고, WAS 장애 시 오류 화면 노출이 불가능하다는 단점이 있다.
 
 ---
 
-### 템플릿
+</details>
+
 <details>
-   <summary>답안 보기</summary>
+   <summary>서블릿</summary>
 
-
-
-</details>
+- 웹 페이지를 동적으로 생성하기 위해 사용하는 서버 프로그램이다.
+- HTTP 요청 메시지 파싱하는 등의 부가적인 작업을 처리하여, 개발자가 비즈니스 로직에만 신경쓰도록 한다.
 
 ---
 
-### 템플릿
+</details>
+
 <details>
-   <summary>답안 보기</summary>
+   <summary>JSP</summary>
 
-
-
-</details>
+- HTML 코드에 자바 코드를 삽입하여, 동적으로 웹 페이지를 생성하는 서버 사이드 스크립트 언어이다.
+- 서블릿으로 화면과 관련된 작업을 하면 상당히 복잡하기 때문에 등장하였다.
+- 실행 시 서블릿으로 변환된다.
 
 ---
 
-### 템플릿
+</details>
+
 <details>
-   <summary>답안 보기</summary>
+   <summary>서블릿 컨테이너</summary>
 
-
-
-</details>
+- 톰캣처럼 서블릿을 지원하는 WAS를 서블릿 컨테이너라고 한다.
+- 서블릿 컨테이너는 서블릿 객체의 생명주기(생성, 초기화, 호출, 종료)를 관리한다.
+  - 서블릿 컨테이너 종료시 함께 종료
+- 서블릿 객체는 싱글톤으로 관리된다.
+  - 요청마다 객체를 생성하는 것은 비효율적이다. 
+  - 모든 요청은 동일한 서블릿 객체 인스턴스에 접근
+- 동시 요청을 위한 멀티 쓰레드 처리 지원
 
 ---
 
-### 템플릿
+</details>
+
 <details>
-   <summary>답안 보기</summary>
+   <summary>요청 시 서블릿 컨테이너 동작 과정</summary>
 
+![image](https://user-images.githubusercontent.com/87891581/192733332-c6be7272-2edd-4d1c-aca0-bd2f9b7af870.png)
 
-
-</details>
+1. 사용자가 URL을 입력하면 HTTP Request가 서블릿 컨테이너로 들어온다.
+2. 서블릿 컨테이너는 쓰레드 풀에서 쓰레드를 꺼내 할당해주고, HTTP
 
 ---
 
-### 템플릿
+</details>
+
 <details>
-   <summary>답안 보기</summary>
+   <summary>동시 처리 해결 방안</summary>
 
+**1. 요청마다 쓰레드 생성**
+- 쓰레드의 생성 비용이 소모되고 생성에 제한이 없다는 단점이 있다.
 
-
-</details>
+**2. 쓰레드 풀**
+- 쓰레드가 미리 생성되어 있으므로, 쓰레드를 생성하고 종료하는 비용이 절약되고, 응답 시간이 빠르다.
+- 생성 가능한 최대치가 존재하므로, 너무 많은 요청이 들어와도 기존 요청은 안전하다.
+- 최대 쓰레드 수를 적절하게 설정하는 것이 중요하다.
+  - 너무 낮게 설정하면, 동시 요청이 많을 때 서버 리소스는 여유롭지만 응답이 지연된다.
+  - 너무 높게 설정하면, 동시 요청이 많을 때 CPU, 메모리 리소스 임계점 초과로 서버가 다운된다.
 
 ---
 
-### 템플릿
+</details>
+
 <details>
-   <summary>답안 보기</summary>
+   <summary>SSR & CSR</summary>
 
-
-
-</details>
 
 ---
 
-### 템플릿
+</details>
+
 <details>
-   <summary>답안 보기</summary>
+   <summary>redirect vs forward</summary>
 
-
-
-</details>
 
 ---
 
-### 템플릿
+</details>
+
 <details>
-   <summary>답안 보기</summary>
+   <summary>프론트 컨트롤러 패턴</summary>
+
+
+---
+
+</details>
+
+<details>
+   <summary>MVC 패턴</summary>
+
+
+---
+
+</details>
+
+<details>
+   <summary>스프링 MVC의 요청 처리 과정</summary>
+
+
+---
+
+</details>
+
+
+<details>
+   <summary>Entity, VO, DTO, DAO</summary>
 
 
 
 </details>
-
----
-
-
-
