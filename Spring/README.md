@@ -158,10 +158,9 @@ DDD 구조
 <details>
    <summary>@Configuration과 싱글톤</summary>
 
-- `@Configuration`는 `@Bean`이 붙은 메서드마다 이미 스프링 빈이 존재하면 존재하는 빈을 반환하고, 스프링 빈이 없으면 생성해서 스프링 빈으로 등록하고 반환하는 코드가 동적으로 만들어진다.
-  - `@Bean`만 사용해도 스프링 빈으로 등록되지만, 싱글톤을 보장하지 않는다.
-  - `@Configuration`이 붙은 클래스도 스프링 빈으로 등록된다.
-
+- `@Configuration`는 `@Bean`이 붙은 메서드마다 이미 스프링 빈이 존재하면 기존의 빈을 반환하고, 스프링 빈이 존재하지 않으면 스프링 빈을 새로 등록하고 반환하는 코드가 동적으로 만들어진다.
+  - 참고로 `@Configuration`이 붙은 클래스도 스프링 빈으로 등록된다.
+- 즉, `@Bean`만 사용해도 스프링 빈으로 등록되지만, 싱글톤을 보장하지 않는다.
 ---
 
 </details>
@@ -171,6 +170,40 @@ DDD 구조
 
 - 스프링 컨테이너가 생성하고 관리하는 자바 객체를 빈이라고 한다.
 - `@Bean`나 `<bean>`로 설정 파일에 빈을 직접 등록하거나, 컴포너트 스캔을 이용하여 자동으로 등록할 수 있다.
+
+---
+
+</details>
+
+<details>
+   <summary>@Bean vs @Component</summary>
+
+- 둘 다 스프링 컨테이너에 빈을 등록하기 위해 사용한다.
+- `@Bean` : 개발자가 작성한 method에 `@Bean`을 붙여주면, 해당 메서드가 반환하는 객체가 빈으로 등록된다.
+  - `@Configuration`과 함께 사용해야 한다.
+- `@Component` : 개발자가 작성한 클래스에 `@Component`를 붙여주면, 해당 클래스는 빈으로 등록된다.
+
+---
+
+</details>
+
+<details>
+   <summary>@Bean을 @Configuration과 함께 사용해야 하는 이유</summary>
+
+- `@Configuration`는 `@Bean`이 붙은 메서드마다 이미 스프링 빈이 존재하면, 존재하는 빈을 반환하도록 한다. 스프링 빈이 없으면, 새로 생성해서 빈으로 등록하는 코드가 동적으로 만들어진다.
+- 즉, `@Bean`만 사용해도 스프링 빈으로 등록되지만, 싱글톤을 보장하지 않는다.
+
+---
+
+</details>
+
+<details>
+   <summary>@Component 종류</summary>
+
+- `@Controller` : 스프링 MVC 컨트롤러로 인식
+- `@Repository` : 스프링 데이터 접근 계층으로 인식하고, 데이터 계층의 예외를 스프링 예외로 변환해준다.
+- `@Configuration` : 스프링 설정 정보로 인식하고, 스프링 빈이 싱글톤을 유지하도록 추가 처리를 한다.
+- `@Service` : `@Service` 는 특별한 처리를 하지 않는다. 대신 비즈니스 계층을 인식하는데 도움이 된다
 
 ---
 
@@ -215,9 +248,10 @@ DDD 구조
    - default 스코프다.
    - 빈이 스프링 컨테이너의 시작과 종료까지 유지된다. 
 2. 프로토타입
-   - 스프링 컨테이너가 빈의 생성과 의존관계 주입, 초기화끼지만 관여한다.
+   - 스프링 컨테이너가 빈의 생성과 의존관계 주입, 초기화까지만 관여한다.
    - 싱글톤 빈은 한번만 생성되지만, 프로토타입 빈은 요청할 때마다 생성된다.
 3. 웹 스코프
+   - 웹 환경에서만 동작하며, 스프링이 해당 스코프의 종료 시점까지 관리한다. 
    - request : HTTP 요청이 들어오고 나갈때까지 유지되는 스코프
    - session : HTTP 세션과 동일한 생명주기를 가지는 스코프
    - application : 서블릿 컨텍스트와 동일한 생명주기를 가지는 스코프
@@ -264,6 +298,15 @@ DDD 구조
 </details>
 
 <details>
+   <summary>서블릿 생성 시점</summary>
+
+- 서버 설정에 따라 다르다. 최초 요청 시점에 생성하게 할 수도 있고, 서블릿 컨테이너가 로딩될 때 생성하게 할 수도 있다.
+
+---
+
+</details>
+
+<details>
    <summary>JSP</summary>
 
 - HTML 코드에 자바 코드를 삽입하여, 동적으로 웹 페이지를 생성하는 서버 사이드 스크립트 언어이다.
@@ -294,8 +337,12 @@ DDD 구조
 
 ![image](https://user-images.githubusercontent.com/87891581/192733332-c6be7272-2edd-4d1c-aca0-bd2f9b7af870.png)
 
-1. 사용자가 URL을 입력하면 HTTP Request가 서블릿 컨테이너로 들어온다.
-2. 서블릿 컨테이너는 쓰레드 풀에서 쓰레드를 꺼내 할당해주고, HTTP
+1. 사용자가 URL을 입력
+2. Servlet Container는 쓰레드 풀에서 쓰레드를 꺼내 할당해주고, HttpServletRequest 객체와 HttpServletResponse 객체를 생성한다.
+3. 사용자가 요청한 URL로 어떤 서블릿에 대한 요청인지 찾는다.
+4. 해당 서블릿의 service()를 실행한다.
+5. 실행이 끝나면 HttpServletResponse 객체 정보를 바탕으로, 클라이언트에게 응답을 보낸다.
+6. HttpServletRequest 객체와 HttpServletResponse 객체는 소멸되고, 쓰레드 풀로 쓰레드를 반환한다. 
 
 ---
 
