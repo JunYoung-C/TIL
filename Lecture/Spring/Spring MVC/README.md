@@ -257,7 +257,7 @@
   - 권장하지 않는다.
 
 ### 3. HTTP 메시지 사용
-> - HTML이나 뷰 템플릿을 사용해도 HTTP 응답 메시지 바디에 HTML 데이터가 담겨서 전달된다. 
+> HTML이나 뷰 템플릿을 사용해도 HTTP 응답 메시지 바디에 HTML 데이터가 담겨서 전달된다. 
 
 - HTTP API를 제공하는 경우에는 데이터를 전달해야 한다.
   - HTTP 메시지 바디에 JSON과 같은 형식으로 데이터를 실어 보낸다.
@@ -405,7 +405,7 @@
   1. 서블릿 컨테이너가 생성될 때 `init()`가 호출된다.
   2. 고객의 요청이 올 때마다 `doFilter()`메서드가 호출된다.
   3. 필터는 체인처럼 여러개로 추가할 수 있으며, 다음 필터가 없다면 서블릿을 호출한다.
-    - 적절하지 않는 요청이라고 판단되면, 서블릿이 호출되지 않는다.
+     - 적절하지 않는 요청이라고 판단되면, 서블릿이 호출되지 않는다.
   4. 이후 서블릿 컨테이너가 종료될 때 `destroy()`가 호출된다.
 
 ### 2. 인터셉터
@@ -457,11 +457,11 @@
 - 서블릿에서 예외 처리 페이지를 등록하기 위해서는 복잡한 과정을 거쳐야한다. 
 - 스프링 부트는 이런 과정을 기본으로 제공하기 때문에, 개발자는 오류 페이지 파일을 추가만 하면 된다.
   - `/error` 경로에 에러 페이지를 추가하면, 자동으로 등록된다.
-  - `BasicController`라는 예외 처리 컨트롤러가 자동으로 등록된다.
-    - `BasicController`는 예외 정보를 model에 담아서 뷰로 전달한다.
-    - `BasicController`는 `text/html` 이외의 요청의 경우 응답을 JSON으로 반환한다.
+  - `BasicErrorController`라는 예외 처리 컨트롤러가 자동으로 등록된다.
+    - `BasicErrorController`는 예외 정보를 model에 담아서 뷰로 전달한다.
+    - `BasicErrorController`는 `text/html` 이외의 요청의 경우 응답을 JSON으로 반환한다.
 
-#### BasicController의 뷰 선택 우선순위
+#### BasicErrorController의 뷰 선택 우선순위
 1. 뷰 템플릿
    - `resources/templates/error/500.html` : 구체적인 것이 우선순위가 더 높다.
    - `resources/templates/error/5xx.html`

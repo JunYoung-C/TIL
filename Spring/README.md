@@ -1,15 +1,6 @@
 # Spring
 
-빈 후처리기
-AOP
-디자인 패턴
-로깅 라이브러리
 
-
-- AOP(Aspect Oriented Programming)
-- Filter vs Interceptor
-- AOP vs Interceptor
-- 레이어드 아키텍처
 - OSIV
 - 커넥션 풀
 - DataSource
@@ -34,7 +25,30 @@ DDD 구조
 ---
 
 <details>
+   <summary>Entity, VO, DTO, DAO</summary>
+
+<br/>
+
+- Entity
+    - 핵심 비즈니스 도메인이고, JPA에서는 데이터베이스 테이블과 ORM 매핑되어 있는 객체이다.
+    - 로직을 가질 수 있다.
+- VO(Value Object)
+    - 실제 데이터만을 저장하는 객체이다.
+    - 로직을 포함할 수 있으며, 객체의 불변성을 보장한다.
+- DTO(Data Transfer Object)
+    - 계층간 데이터 교환을 위해 사용하는 객체이다.
+    - 주요 로직 없이, 단순 getter, setter만 존재한다.
+- DAO(Data Access Object)
+    - DB에 접근하여 실제 데이터를 조회하거나 조작하는 기능을 가진 객체이다.
+    - DAO는 데이터베이스에 더 가깝고, Repository는 도메인 객체에 더 가까운 개념이다.
+    - Repository는 DAO를 사용해서 구현할 수 있다.
+
+</details>
+
+<details>
    <summary>프레임워크와 라이브러리</summary>
+
+<br/>
 
 - 프레임워크 : 원하는 기능 구현에 집중하여 개발할 수 있도록, 일정한 형태와 필요한 기능을 갖추고 있는 골격, 뼈대를 의미한다.
 - 라이브러리 : 자주 사용되는 로직을, 재사용이 편리하도록 잘 정리한 코드의 집합을 말한다.
@@ -48,6 +62,8 @@ DDD 구조
 <details>
    <summary>EJB</summary>
 
+<br/>
+
 - Enterprise JavaBeans
 - 기업 환경의 시스템을 구현하기 위한 서버측 컴포넌트 모델이다.
 - 복잡하고 객체지향적이지 않다는 단점 등으로 인해 스프링이 등장하였다.
@@ -58,6 +74,8 @@ DDD 구조
 
 <details>
    <summary>POJO</summary>
+
+<br/>
 
 - Plain Old Java Object
 - 특정 기술 규약과 환경에 종속되지 않은 순수한 자바 오브젝트를 말한다.
@@ -70,6 +88,8 @@ DDD 구조
 
 <details>
    <summary>Spring이란</summary>
+
+<br/>
 
 - 자바 엔터프라이즈 개발을 편하게 해주는 경량급 오픈소스 애플리케이션 프레임워크이다.
 - 특징
@@ -85,6 +105,8 @@ DDD 구조
 <details>
    <summary>스프링 부트란</summary>
 
+<br/>
+
 - 스프링을 복잡한 설정 없이 쉽고 빠르게 만들어주는 프레임워크이다.
 
 ---
@@ -93,6 +115,8 @@ DDD 구조
 
 <details>
    <summary>IoC</summary>
+
+<br/>
 
 - Inversion Of Control, 제어의 역전
 - 객체의 생성에서부터 생명주기의 관리까지 모든 객체에 대한 제어권이 바뀐 것을 말한다.
@@ -105,6 +129,8 @@ DDD 구조
 <details>
    <summary>DI (Dependency Injection)</summary>
 
+<br/>
+
 - Dependency Injection, 의존관계 주입 or 의존성 주입
 - Spring 프레임워크에서 지원하는 IoC의 형태로, 클래스 사이의 의존관계를 빈 설정 정보를 바탕으로 컨테이너가 연결해 주는 것을 말한다.
 
@@ -114,6 +140,8 @@ DDD 구조
 
 <details>
    <summary>DI 주입 방식</summary>
+
+<br/>
 
 1. 생성자 주입
    - 생성자를 통해서 의존관계를 주입받는 방법
@@ -137,6 +165,8 @@ DDD 구조
 <details>
    <summary>스프링 컨테이너</summary>
 
+<br/>
+
 - BeanFactory와 ApplicationContext를 스프링 컨테이너라고 한다.
   - BeanFactory는 빈을 관리하고 조회하는 역할을 한다.
   - BeanFactory를 상속한 ApplicationContext는 빈 관리 기능뿐만 아니라, 국제화 등의 추가적인 기능을 제공한다.
@@ -148,6 +178,8 @@ DDD 구조
 <details>
    <summary>스프링이 싱글톤을 지원하는 이유</summary>
 
+<br/>
+
 - 대부분의 스프링 애플리케이션은 웹 애플리케이션이다. 웹 애플리케이션은 보통 여러 고객이 여러 요청을 한다.
 - 싱글톤을 사용하지 않으면 각 요청마다 새로운 객체가 생성되고 소멸된다. 이 방식은 트래픽이 증가할수록 메모리 낭비가 심하기 때문에, 객체를 1개만 생성하고 공유하는 싱글톤 패턴을 사용한다.
 
@@ -157,6 +189,8 @@ DDD 구조
 
 <details>
    <summary>@Configuration과 싱글톤</summary>
+
+<br/>
 
 - `@Configuration`는 `@Bean`이 붙은 메서드마다 이미 스프링 빈이 존재하면 기존의 빈을 반환하고, 스프링 빈이 존재하지 않으면 스프링 빈을 새로 등록하고 반환하는 코드가 동적으로 만들어진다.
   - 참고로 `@Configuration`이 붙은 클래스도 스프링 빈으로 등록된다.
@@ -168,6 +202,8 @@ DDD 구조
 <details>
    <summary>빈이란</summary>
 
+<br/>
+
 - 스프링 컨테이너가 생성하고 관리하는 자바 객체를 빈이라고 한다.
 - `@Bean`나 `<bean>`로 설정 파일에 빈을 직접 등록하거나, 컴포너트 스캔을 이용하여 자동으로 등록할 수 있다.
 
@@ -177,6 +213,8 @@ DDD 구조
 
 <details>
    <summary>@Bean vs @Component</summary>
+
+<br/>
 
 - 둘 다 스프링 컨테이너에 빈을 등록하기 위해 사용한다.
 - `@Bean` : 개발자가 작성한 method에 `@Bean`을 붙여주면, 해당 메서드가 반환하는 객체가 빈으로 등록된다.
@@ -190,6 +228,8 @@ DDD 구조
 <details>
    <summary>@Bean을 @Configuration과 함께 사용해야 하는 이유</summary>
 
+<br/>
+
 - `@Configuration`는 `@Bean`이 붙은 메서드마다 이미 스프링 빈이 존재하면, 존재하는 빈을 반환하도록 한다. 스프링 빈이 없으면, 새로 생성해서 빈으로 등록하는 코드가 동적으로 만들어진다.
 - 즉, `@Bean`만 사용해도 스프링 빈으로 등록되지만, 싱글톤을 보장하지 않는다.
 
@@ -199,6 +239,8 @@ DDD 구조
 
 <details>
    <summary>@Component 종류</summary>
+
+<br/>
 
 - `@Controller` : 스프링 MVC 컨트롤러로 인식
 - `@Repository` : 스프링 데이터 접근 계층으로 인식하고, 데이터 계층의 예외를 스프링 예외로 변환해준다.
@@ -212,6 +254,8 @@ DDD 구조
 <details>
    <summary>빈의 생명주기</summary>
 
+<br/>
+
 - 스프링 컨테이너 생성 -> 스프링 빈 생성 -> 의존관계 주입 -> 초기화 콜백 -> 사용 -> 소멸전 콜백 -> 스프링 종료
     - 초기화 콜백 : 빈 생성과 의존관계 주입이 완료된 후 호출
     - 소멸전 콜백 : 빈이 소멸되기 직전에 호출
@@ -222,6 +266,8 @@ DDD 구조
 
 <details>
    <summary>빈 생명주기 콜백 지원 방법</summary>
+
+<br/>
 
 - 스프링은 빈의 생성과 의존관계 주입이 완료되면 초기화 콜백이 발생한다. 또한, 싱글톤 빈은 스프링 컨테이너가 종료되기 직전에 소멸 콜백이 발생한다.
 - 스프링은 인터페이스를 구현하는 방법, 설정 정보에서 빈 속성을 사용하는 방법, 애노테이션을 사용하는 방법으로 빈 생명주기 콜백을 지원한다.
@@ -242,6 +288,8 @@ DDD 구조
 
 <details>
    <summary>빈 스코프</summary>
+
+<br/>
 
 - 빈이 존재할 수 있는 범위를 의미하며, 스프링은 다양한 스코프를 지원한다.
 1. 싱글톤
@@ -264,6 +312,8 @@ DDD 구조
 
 <details>
    <summary>웹 서버와 웹 애플리케이션 서버</summary>
+
+<br/>
 
 ![image](https://user-images.githubusercontent.com/87891581/192721935-a350c793-4754-43f8-832b-b6bcbfc76f46.png)
 
@@ -290,6 +340,8 @@ DDD 구조
 <details>
    <summary>서블릿</summary>
 
+<br/>
+
 - 웹 페이지를 동적으로 생성하기 위해 사용하는 서버 프로그램이다.
 - HTTP 요청 메시지 파싱하는 등의 부가적인 작업을 처리하여, 개발자가 비즈니스 로직에만 신경쓰도록 한다.
 
@@ -300,6 +352,8 @@ DDD 구조
 <details>
    <summary>서블릿 생성 시점</summary>
 
+<br/>
+
 - 서버 설정에 따라 다르다. 최초 요청 시점에 생성하게 할 수도 있고, 서블릿 컨테이너가 로딩될 때 생성하게 할 수도 있다.
 
 ---
@@ -307,18 +361,27 @@ DDD 구조
 </details>
 
 <details>
-   <summary>JSP</summary>
+   <summary>JSP와 Thymeleaf</summary>
 
-- HTML 코드에 자바 코드를 삽입하여, 동적으로 웹 페이지를 생성하는 서버 사이드 스크립트 언어이다.
-- 서블릿으로 화면과 관련된 작업을 하면 상당히 복잡하기 때문에 등장하였다.
-- 실행 시 서블릿으로 변환된다.
+<br/>
 
+- JSP
+  - HTML 코드에 자바 코드를 삽입하여, 동적으로 웹 페이지를 생성하는 서버 사이드 스크립트 언어이다.
+  - 서블릿으로 화면과 관련된 작업을 하면 상당히 복잡하기 때문에 등장하였다.
+  - 실행 시 서블릿으로 변환된다.
+- Thymeleaf
+  - 서버에서 HTML을 동적으로 렌더링 하는 용도로 사용하는 뷰 템플릿이다.
+  - 빈 호출 지원과 폼 관리를 위한 추가 속성(`th:object`, `th:field`, `th:errors`, `th:errorclass`) 등 스프링과 통합된 다양한 기능을 제공한다.
+    - `th:object` : form에서 사용할 객체를 지정한다. 모델에 들어있는 데이터를 편하게 사용할 수 있다.
+    - `th:field` : id, name, value 속성을 자동으로 만들어준다.
 ---
 
 </details>
 
 <details>
    <summary>서블릿 컨테이너</summary>
+
+<br/>
 
 - 톰캣처럼 서블릿을 지원하는 WAS를 서블릿 컨테이너라고 한다.
 - 서블릿 컨테이너는 서블릿 객체의 생명주기(생성, 초기화, 호출, 종료)를 관리한다.
@@ -334,6 +397,8 @@ DDD 구조
 
 <details>
    <summary>요청 시 서블릿 컨테이너 동작 과정</summary>
+
+<br/>
 
 ![image](https://user-images.githubusercontent.com/87891581/192733332-c6be7272-2edd-4d1c-aca0-bd2f9b7af870.png)
 
@@ -351,6 +416,8 @@ DDD 구조
 <details>
    <summary>동시 처리 해결 방안</summary>
 
+<br/>
+
 **1. 요청마다 쓰레드 생성**
 - 쓰레드의 생성 비용이 소모되고 생성에 제한이 없다는 단점이 있다.
 
@@ -367,6 +434,8 @@ DDD 구조
 
 <details>
    <summary>SSR & CSR</summary>
+
+<br/>
 
 ### SSR
 - 서버 사이드 렌더링
@@ -391,6 +460,8 @@ DDD 구조
 <details>
    <summary>redirect vs forward</summary>
 
+<br/>
+
 - 리다이렉트
   - 클라이언트로 요청에 대한 응답이 나갔다가, redirect 경로로 새로 요청하는 것이다.
   - 클라이언트가 인지할 수 있고, URL 경로도 실제로 변경된다.
@@ -404,6 +475,8 @@ DDD 구조
 
 <details>
    <summary>MVC 패턴</summary>
+
+<br/>
 
 - 모델, 뷰, 컨트롤러로 이루어진 디자인 패턴이다. 비즈니즈 로직은 Controller로, 화면을 그리는 일은 View로 분리한 다음에 뷰가 필요한 데이터는 Model에 담아서 넘긴다.
   - 모델 : 뷰에 출력할 데이터를 담아둔다.
@@ -422,6 +495,8 @@ DDD 구조
 <details>
    <summary>프론트 컨트롤러 패턴</summary>
 
+<br/>
+
 - 서블릿 하나로 클라이언트 요청을 받고, 그에 맞는 컨트롤러를 찾아서 호출한다.
 - 여러 개의 서블릿으로 처리할 때 중복되는 코드를 하나로 묶어서 관리한다.
     - 중복되는 코드 : view로 포워드, prefix, suffix
@@ -433,6 +508,8 @@ DDD 구조
 
 <details>
    <summary>스프링 MVC의 요청 처리 과정</summary>
+
+<br/>
 
 ![image](https://user-images.githubusercontent.com/87891581/168423149-d198ea93-908f-4c09-85b2-8b43e527f13c.png)
 1. 핸들러 조회 
@@ -455,17 +532,157 @@ DDD 구조
 
 </details>
 
-
 <details>
-   <summary>Entity, VO, DTO, DAO</summary>
+   <summary>@Controller vs @RestController</summary>
 
 <br/>
 
-- Entity : 핵심 비즈니스 도메인이고, JPA에서는 데이터베이스 테이블과 ORM 매핑되어 있는 객체이다. 로직을 가질 수 있다.
-- VO(Value Object) : 실제 데이터만을 저장하는 객체이다. 로직을 포함할 수 있으며, 객체의 불변성을 보장한다.
-- DTO(Data Transfer Object) : 계층간 데이터 교환을 위해 사용하는 객체이다. 주요 로직 없이, 단순 getter, setter만 존재한다.
-- DAO(Data Access Object) : DB에 접근하여 실제 데이터를 조회하거나 조작하는 기능을 가진 객체이다.
-- DAO는 데이터베이스에 더 가깝고, Repository는 도메인 객체에 더 가까운 개념이다.
-- Repository는 DAO를 사용해서 구현할 수 있다.
+- `@Controller`는 뷰를 반환하기 위해 사용한다.
+- `@RestController`는 `@Controller`와 `@ResponseBody`가 적용된 애노테이션으로, 데이터를 반환하기 위해 사용한다.
+
+</details>
+
+<details>
+   <summary>메시지, 국제화</summary>
+
+<br/>
+
+### 메시지
+- 화면을 구성하는 문자들을 하드코딩하지 않고, 한 곳에서 관리하도록 하는 기능을 메시지 기능이라고 한다.
+    - 하드코딩 : 상수나 변수에 들어가는 값을 소스코드에 직접 쓰는 방식
+- 메시지 관리 기능을 사용하려면, 스프링이 제공하는 `MessageSource`를 스프링 빈으로 등록해야 한다.
+    - 스프링 부트는 자동으로 등록해준다.
+    - 스프링 부트는 `messages.properties`가 기본 메시지 파일이다.
+
+### 국제화
+- 메시지 파일을 각 나라별로 별도로 관리하면 서비스를 국제화 할 수 있다.
+    - `messages_ko.properties`와 같이 언어에 맞는 메시지 파일을 생성하면 된다.
+- 어떤 나라에서 접근했는지 인식하는 방법은 `Accept-Language` 헤더 값을 사용하거나, 사용자가 직접 언어를 선택하도록 하고 쿠키 등을 사용해서 처리하면 된다.
+    - 스프링 부트는 `Accept-Language`로 인식하는 방법을 기본으로 지원한다.
+    - 스프링은 `Locale` 선택 방식을 변경할 수 있도록 `LocaleResolver`라는 인터페이스를 제공한다. 
+
+</details>
+
+<details>
+   <summary>필터 & 인터셉터</summary>
+
+<br/>
+
+## 필터 & 인터셉터
+- 애플리케이션 여러 로직에서 공통으로 관심이 있는 것을 공통 관심사라고 한다.
+    - ex) 여러 컨트롤러에서 로그인 여부 확인 필요
+- 공통 관심사는 스프링의 AOP로 해결할 수 있지만, 웹과 관련된 공통 관심사는 서블릿 필터 또는 스프링 인터셉터를 사용하는 것이 좋다.
+    - 웹과 관련된 공통 관심사를 처리할 때는 HTTP의 헤더나 URL의 정보들이 필요하다.
+    - 인터셉터는 스프링 MVC 구조에 특화된 필터 기능을 제공하므로, 일반적으로는 인터셉터를 사용하는 것이 더 편리하다.
+
+### 1. 필터
+- 서블릿에 요청이 전달되기 전/후에 url 패턴에 맞는 모든 요청에 대해 부가 작업을 처리할 수 있는 기능을 제공한다.
+    - 스프링의 경우 서블릿은 디스패쳐 서블릿이 해당된다.
+- 스프링 부트를 사용한다면, `FilterRegistrationBean`로 필터를 등록할 수 있다.
+    - `ServletComponentScan`, `@WebFilter`는 필터 순서 조절이 안된다.
+    - 서블릿 컨테이너가 필터를 싱글톤 객체로 생성하고, 관리한다.
+- 다음 필터나 서블릿을 호출할 때 `request`, `response`를 다른 객체로 만들어 넘길 수 있다.
+
+#### 필터 흐름
+> HTTP 요청 -> WAS -> 필터 -> 서블릿 -> 인터셉터 -> 컨트롤러
+
+1. 서블릿 컨테이너가 생성될 때 `init()`가 호출된다.
+2. 고객의 요청이 올 때마다 `doFilter()`메서드가 호출된다.
+3. 필터는 체인처럼 여러개로 추가할 수 있으며, 다음 필터가 없다면 서블릿을 호출한다.
+   - 적절하지 않는 요청이라고 판단되면, 서블릿이 호출되지 않는다.
+4. 이후 서블릿 컨테이너가 종료될 때 `destroy()`가 호출된다.
+
+### 2. 인터셉터
+- 스프링 MVC가 제공하는 기능으로, 디스패쳐 서블릿이 컨트롤러를 호출하기 전/후와 요청 완료 후에 추가적인 작업을 할 수 있도록 기능을 제공한다.
+- 인터셉터는 `request`, `response` 뿐만 아니라, 어떤 컨트롤러가 호출되는지와 어떤 `modelAndView`가 반환되는지 알 수 있다.
+- `WebMvcConfigurer`가 제공하는 `addInterceptors()`로 인터셉터를 등록할 수 있다.
+    - 싱글톤처럼 사용되기 때문에 멤버변수를 사용하면 위험하다.
+- [URL 경로 공식 문서](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/util/pattern/PathPattern.html)
+
+#### 인터셉터 흐름
+![image](https://user-images.githubusercontent.com/87891581/168583864-9db2087c-cf50-4516-b766-9dd181573cb0.png)
+1. HTTP 요청이 들어오면, 디스패쳐 서블릿을 거쳐 `preHandle()`이 호출된다.
+    - `preHandle()`의 응답값이 true면 다음으로 진행하고, false면 더이상 진행되지 않는다.
+2. 컨트롤러를 거쳐 내부 로직 수행 후 `postHandle()`이 호출된다.
+    - 컨트롤러에서 예외가 발생하면 `postHandle()`가 호출되지 않고 `ExceptionResolver`가 호출되어 예외 처리를 한다.
+3. 뷰가 렌더링 된 후 `afterCompletion()`이 호출된다.
+    - `afterCompletion()`은 예외가 발생하더라도 항상 호출된다.
+
+</details>
+
+<details>
+   <summary>BindingResult</summary>
+
+<br/>
+
+</details>
+
+<details>
+   <summary>검증</summary>
+
+<br/>
+
+</details>
+
+<details>
+   <summary>예외 처리와 오류 페이지</summary>
+
+<br/>
+
+</details>
+
+<details>
+   <summary>API 예외 처리</summary>
+
+<br/>
+
+</details>
+
+<details>
+   <summary>컨버터 & 포맷터</summary>
+
+<br/>
+
+</details>
+
+<details>
+   <summary>파일 업로드</summary>
+
+<br/>
+
+</details>
+
+<details>
+   <summary>빈 후처리기</summary>
+
+<br/>
+
+</details>
+
+<details>
+   <summary>AOP(Aspect Oriented Programming)</summary>
+
+<br/>
+
+</details>
+
+<details>
+   <summary>AOP vs Interceptor</summary>
+
+<br/>
+
+</details>
+
+<details>
+   <summary>레이어드 아키텍처</summary>
+
+<br/>
+
+</details>
+
+<details>
+   <summary>스프링 애노테이션</summary>
+
+<br/>
 
 </details>
