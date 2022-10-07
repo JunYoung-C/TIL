@@ -368,9 +368,8 @@
   - 서버만으로 검증하면, 즉각적인 고객 사용성이 부족해진다.
 
 ### 유의점
-- 폼 데이터는 `BindingResult`로 검증하고, API 데이터는 예외를 직접 던져서 `@ExceptionHandler`로 처리한다.
-  - `@ModelAttribute`는 특정 필드가 바인딩 되지 않아도 나머지 필드는 정상 바인딩 되고, Validator를 사용한 검증도 적용할 수 있다.
-  - `@RequestBody`는 `HttpMessageConverter` 단게에서 JSON 데이터를 객체로 변경하지 못하면 예외가 발생하기 때문에, 컨트롤러가 호출되지 않고 Validator도 적용할 수 없다.
+- `@ModelAttribute`는 특정 필드가 바인딩 되지 않아도 나머지 필드는 정상 바인딩 되고, Validator를 사용한 검증도 적용할 수 있다.
+- `@RequestBody`는 `HttpMessageConverter` 단게에서 JSON 데이터를 객체로 변경하지 못하면 예외가 발생하기 때문에, 컨트롤러가 호출되지 않고 Validator도 적용할 수 없다.
 - `BindingResult`는 검증할 대상 바로 다음에 와야한다.
 - `BindingResult`는 Model에 자동으로 포함된다.
 - 폼 데이터 전달을 위한 별도의 객체를 사용한다.
@@ -445,7 +444,8 @@
 ```
 1. WAS(클라이언트 요청, dispatcherType = REQUEST) -> 필터 -> 서블릿 -> 인터셉터 -> 컨트롤러
 2. WAS <- 필터 <- 서블릿 <- 인터셉터 <- 컨트롤러(예외 발생 or sendError 호출)
-2. WAS(에러 페이지 요청, dispatcherType = ERROR) -> 필터(X) -> 서블릿 -> 인터셉터(X) -> 컨트롤러 -> View(에러 페이지)
+3. WAS 오류 페이지 확인. 없으면 기본 오류 페이지로 응답
+4. WAS(에러 페이지 요청, dispatcherType = ERROR) -> 필터(X) -> 서블릿 -> 인터셉터(X) -> 컨트롤러 -> View(에러 페이지)
 ```
 - 예외가 WAS까지 전달되면, WAS는 오류 페이지 경로를 찾아서 내부에서 오류 페이지를 호출한다. 
    - WAS는 오류 정보를 `request`의 `attribute`에 추가해서 넘겨준다.

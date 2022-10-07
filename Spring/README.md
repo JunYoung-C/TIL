@@ -365,15 +365,22 @@ DDD 구조
 
 <br/>
 
-- JSP
-  - HTML 코드에 자바 코드를 삽입하여, 동적으로 웹 페이지를 생성하는 서버 사이드 스크립트 언어이다.
-  - 서블릿으로 화면과 관련된 작업을 하면 상당히 복잡하기 때문에 등장하였다.
-  - 실행 시 서블릿으로 변환된다.
-- Thymeleaf
-  - 서버에서 HTML을 동적으로 렌더링 하는 용도로 사용하는 뷰 템플릿이다.
-  - 빈 호출 지원과 폼 관리를 위한 추가 속성(`th:object`, `th:field`, `th:errors`, `th:errorclass`) 등 스프링과 통합된 다양한 기능을 제공한다.
-    - `th:object` : form에서 사용할 객체를 지정한다. 모델에 들어있는 데이터를 편하게 사용할 수 있다.
-    - `th:field` : id, name, value 속성을 자동으로 만들어준다.
+#### JSP
+- HTML 코드에 자바 코드를 삽입하여, 동적으로 웹 페이지를 생성하는 서버 사이드 스크립트 언어이다.
+- 서블릿으로 화면과 관련된 작업을 하면 상당히 복잡하기 때문에 등장하였다.
+- 실행 시 서블릿으로 변환된다.
+
+#### Thymeleaf
+- 서버에서 HTML을 동적으로 렌더링 하는 용도로 사용하는 뷰 템플릿이다.
+- 검증 오류 통합 기능과 폼 관리를 위한 추가 속성(`th:object`, `th:field`, `th:errors`, `th:errorclass`) 등 스프링과 통합된 다양한 기능을 제공한다.
+  - 검증 오류 통합 기능
+    - 스프링의 `BindingResult`를 활용해서 편리하게 검증 오류를 표현하는 기능을 제공한다.
+    - `#fields` : `BindingResult`가 제공하는 검증 오류에 접근 가능
+    - `th:errors` : 해당 필드에 오류가 있는 경우에 태그를 출력
+    - `th:errorclass` : `th:field`에서 지정한 필드에 오류가 있으면 `class`정보를 추가
+  - `th:object` : form에서 사용할 객체를 지정한다. 모델에 들어있는 데이터를 편하게 사용할 수 있다.
+  - `th:field` : id, name, value 속성을 자동으로 만들어준다.
+
 ---
 
 </details>
@@ -569,12 +576,6 @@ DDD 구조
 <br/>
 
 ## 필터 & 인터셉터
-- 애플리케이션 여러 로직에서 공통으로 관심이 있는 것을 공통 관심사라고 한다.
-    - ex) 여러 컨트롤러에서 로그인 여부 확인 필요
-- 공통 관심사는 스프링의 AOP로 해결할 수 있지만, 웹과 관련된 공통 관심사는 서블릿 필터 또는 스프링 인터셉터를 사용하는 것이 좋다.
-    - 웹과 관련된 공통 관심사를 처리할 때는 HTTP의 헤더나 URL의 정보들이 필요하다.
-    - 인터셉터는 스프링 MVC 구조에 특화된 필터 기능을 제공하므로, 일반적으로는 인터셉터를 사용하는 것이 더 편리하다.
-
 ### 1. 필터
 - 서블릿에 요청이 전달되기 전/후에 url 패턴에 맞는 모든 요청에 대해 부가 작업을 처리할 수 있는 기능을 제공한다.
     - 스프링의 경우 서블릿은 디스패쳐 서블릿이 해당된다.
@@ -611,37 +612,41 @@ DDD 구조
 </details>
 
 <details>
-   <summary>BindingResult</summary>
+   <summary>예외처리 방법 (feat. 내 프로젝트)</summary>
 
 <br/>
+
+- `@ModelAttribute`
+  - 필드 관련 예외는 `Bean Validation`과 `BindingResult`가 제공하는 `rejectValue()`로 잡을 수 있다. 
+  - 오브젝트 관련 예외는 `BindingResult`가 제공하는 `reject()`를 사용한다.
+  - 예외를 모두 잡지 못한 경우를 위해 스프링 부트의 경우 `/errer` 경로에 에러 페이지를 만들어 놓으면, `BasicErrorController`가 에러 페이지를 자동으로 등록해준다.
+- `@ResponseBody`
+  - 간단한 필드 예외는 `Bean Validation`과 `@ExceptionHandler`의 조합으로 처리할 수 있다.
+  - 이외에는 예외를 던지고 `@ExceptionHandler`로 처리한다.
 
 </details>
 
 <details>
-   <summary>검증</summary>
+   <summary>ExceptionResolver</summary>
 
 <br/>
+
+![image](https://user-images.githubusercontent.com/87891581/168731890-ab3c4b86-8dd9-4141-bc90-b24dd40c3068.png)
+- 스프링 MVC는 컨트롤러(핸들러) 밖으로 던저진 예외를 해결하고, 동작 방식을 변경할 수 있도록 `ExceptionResolver`를 제공한다.
+    - 컨트롤러에서 예외가 발생하면 `postHandle()`이 호출되지 않고, `ExceptionResolver`가 호출된다.
+    - 일반적으로 `@ExceptionHandler`와 `@ControllerAdvice`를 사용하여 처리한다.
+- 예외가 발생해도 서블릿 컨테이너까지 예외가 전달되지 않고, 스프링 MVC에서 예외 처리는 끝이난다.
+    - 결과적으로 WAS 입장에서는 정상 처리가 되었다.
 
 </details>
 
 <details>
-   <summary>예외 처리와 오류 페이지</summary>
+   <summary>컨버터 vs 포맷터</summary>
 
 <br/>
 
-</details>
-
-<details>
-   <summary>API 예외 처리</summary>
-
-<br/>
-
-</details>
-
-<details>
-   <summary>컨버터 & 포맷터</summary>
-
-<br/>
+- `Converter`는 타입에 제한이 없는, 범용 타입 변환 기능을 제공한다.
+- `Formatter`는 문자에 특화된 컨버터로, 문자를 다른 객체로 변환하거나 객체를 문자로 변환하는 기능을 제공한다.
 
 </details>
 
@@ -650,39 +655,69 @@ DDD 구조
 
 <br/>
 
+- `multipart/form-data`방식은 다른 종류의 여러 파일과 폼의 내용을 함께 전송할 수 있다.
+    - 일반적인 폼 데이터는 문자 형식, 파일은 바이너리 형식이다.
+- 스프링이 지원하는 `MultipartFile`로 `multipart/form-data` 방식의 폼 데이터를 효과적으로 처리할 수 있다.
+    - 업로드하는 HTML Form의 name에 맞추어 `@RequestParam`을 적용하거나, `@ModelAttribute`를 사용해도 된다.
+    - 서블릿이 제공하는 `Part`는 `HttpServletRequest`를 사용해야 하고, 추가로 파일 부분만 구분하려면 여러가지 코드를 넣어야 한다.
+
 </details>
 
 <details>
    <summary>빈 후처리기</summary>
 
+- 빈 저장소에 등록할 목적으로 생성한 객체를 빈 저장소에 등록하기 직전에 조작하기 위해 사용한다.
+- 
 <br/>
 
 </details>
 
 <details>
-   <summary>AOP(Aspect Oriented Programming)</summary>
+   <summary>AOP</summary>
 
 <br/>
+
+- Aspect Oriented Programming, 관점 지향 프로그래밍
+- 애플리케이션 로직은 핵심 기능과 부가 기능으로 나눌 수 있다.
+    - 핵심 기능 : 해당 객체가 제공하는 고유의 기능. 핵심 비즈니스 로직.
+    - 부가 기능 : 핵심 기능을 보조하기 위해 제공되는 기능. ex) 로그 추적 로직, 트랜잭션 로직
+- 보통 부가 기능은 여러 클래스에 걸쳐서 사용되며, 이런 부가 기능을 횡단 관심사라고 한다.
+- AOP는 횡단 관심사를 애스펙트로 모듈화하여 핵심 로직에서 분리하는 프로그래밍 방식을 말한다.
+    - 애스펙트 : 부가 기능과, 부가 기능을 어디에 적용할지 정의한 것이다.
 
 </details>
 
 <details>
-   <summary>AOP vs Interceptor</summary>
+   <summary>AOP 적용 방식</summary>
 
 <br/>
+
+1. 컴파일 시점에 적용
+   - 자바 파일이 `.class` 바이트 코드 파일로 컴파일되는 시점에 실제 대상 코드에 애스펙트를 통한 부가 기능 코드가 포함된다.
+   - `AspectJ`가 사용하는 방법
+
+2. 클래스 로딩 시점에 적용
+   - `.class` 바이트 코드 파일을 JVM에 저장하기 전에 실제 대상 코드에 애스펙트를 통한 부가 기능 코드가 포함된다.
+   - `AspectJ`가 사용하는 방법
+
+3. 런타임 시점에 적용
+   - `Spring AOP`가 사용하는 방법
+   - 자바의 메인 메서드가 실행된 후 프록시를 통해 스프링 빈에 부가 기능을 적용한다.
+       - 실제 대상 코드는 그대로 유지한다.
+       - 프록시는 메서드 오버라이딩 개념으로 동작하기 때문에 메서드 실행 지점에만 AOP를 적용할 수 있다.
 
 </details>
 
 <details>
-   <summary>레이어드 아키텍처</summary>
+   <summary>AOP vs Interceptor vs filter</summary>
 
 <br/>
 
-</details>
-
-<details>
-   <summary>스프링 애노테이션</summary>
-
-<br/>
+- AOP vs Interceptor, Filter
+  - 웹과 관련된 공통 관심사를 처리할 때는 HTTP의 헤더나 URL의 정보들이 필요하다. 
+  - 이에 대한 정보를 제공하는 서블릿 필터와 스프링 인터셉터를 사용하는 것이 좋다. 
+- Interceptor vs Filter
+  - 문자 인코딩과 같이 전체적인 Request 단에서 어떤 처리가 필요하다면 Filter를 사용한다. 
+  - 그렇지 않다면 스프링 MVC 구조에 특화된 필터 기능을 제공하는 인터셉터를 사용하는 것이 편리하다.
 
 </details>
