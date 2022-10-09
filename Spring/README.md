@@ -1,13 +1,7 @@
 # Spring
 
 
-- 커넥션 풀
-- DataSource
-- 트랜잭션을 추상화하는 이유
-- 트랜잭션 동기화 매니저
-- 선언적 트랜잭션 vs 프로그래밍 방식 트랜잭션
-- @Transactional
-Propagation 전파단계
+
 Spring batch
 MSA vs Monolithic(모놀리식)
 DDD 구조
@@ -554,6 +548,7 @@ DDD 구조
 - `@Controller`는 뷰를 반환하기 위해 사용한다.
 - `@RestController`는 `@Controller`와 `@ResponseBody`가 적용된 애노테이션으로, 데이터를 반환하기 위해 사용한다.
 
+---
 </details>
 
 <details>
@@ -575,6 +570,8 @@ DDD 구조
     - 스프링 부트는 `Accept-Language`로 인식하는 방법을 기본으로 지원한다.
     - 스프링은 `Locale` 선택 방식을 변경할 수 있도록 `LocaleResolver`라는 인터페이스를 제공한다. 
 
+---
+
 </details>
 
 <details>
@@ -582,7 +579,6 @@ DDD 구조
 
 <br/>
 
-## 필터 & 인터셉터
 ### 1. 필터
 - 서블릿에 요청이 전달되기 전/후에 url 패턴에 맞는 모든 요청에 대해 부가 작업을 처리할 수 있는 기능을 제공한다.
     - 스프링의 경우 서블릿은 디스패쳐 서블릿이 해당된다.
@@ -618,6 +614,8 @@ DDD 구조
 3. 뷰가 렌더링 된 후 `afterCompletion()`이 호출된다.
     - `afterCompletion()`은 예외가 발생하더라도 항상 호출된다.
 
+---
+
 </details>
 
 <details>
@@ -633,6 +631,8 @@ DDD 구조
   - 간단한 필드 예외는 `Bean Validation`과 `@ExceptionHandler`의 조합으로 처리할 수 있다.
   - 이외에는 예외를 던지고 `@ExceptionHandler`로 처리한다.
 
+---
+
 </details>
 
 <details>
@@ -647,6 +647,8 @@ DDD 구조
 - 예외가 발생해도 서블릿 컨테이너까지 예외가 전달되지 않고, 스프링 MVC에서 예외 처리는 끝이난다.
     - 결과적으로 WAS 입장에서는 정상 처리가 되었다.
 
+---
+
 </details>
 
 <details>
@@ -656,6 +658,8 @@ DDD 구조
 
 - `Converter`는 타입에 제한이 없는, 범용 타입 변환 기능을 제공한다.
 - `Formatter`는 문자에 특화된 컨버터로, 문자를 다른 객체로 변환하거나 객체를 문자로 변환하는 기능을 제공한다.
+
+---
 
 </details>
 
@@ -670,14 +674,18 @@ DDD 구조
     - 업로드하는 HTML Form의 name에 맞추어 `@RequestParam`을 적용하거나, `@ModelAttribute`를 사용해도 된다.
     - 서블릿이 제공하는 `Part`는 `HttpServletRequest`를 사용해야 하고, 추가로 파일 부분만 구분하려면 여러가지 코드를 넣어야 한다.
 
+---
+
 </details>
 
 <details>
    <summary>빈 후처리기</summary>
 
-- 빈 저장소에 등록할 목적으로 생성한 객체를 빈 저장소에 등록하기 직전에 조작하기 위해 사용한다.
-- 
 <br/>
+
+- 빈 저장소에 등록할 목적으로 생성한 객체를 빈 저장소에 등록하기 직전에 조작하기 위해 사용한다.
+
+---
 
 </details>
 
@@ -693,6 +701,8 @@ DDD 구조
 - 보통 부가 기능은 여러 클래스에 걸쳐서 사용되며, 이런 부가 기능을 횡단 관심사라고 한다.
 - AOP는 횡단 관심사를 애스펙트로 모듈화하여 핵심 로직에서 분리하는 프로그래밍 방식을 말한다.
     - 애스펙트 : 부가 기능과, 부가 기능을 어디에 적용할지 정의한 것이다.
+
+---
 
 </details>
 
@@ -715,6 +725,8 @@ DDD 구조
        - 실제 대상 코드는 그대로 유지한다.
        - 프록시는 메서드 오버라이딩 개념으로 동작하기 때문에 메서드 실행 지점에만 AOP를 적용할 수 있다.
 
+---
+
 </details>
 
 <details>
@@ -728,6 +740,8 @@ DDD 구조
   - 문자 인코딩과 같이 전체적인 Request 단에서 어떤 처리가 필요하다면 Filter를 사용한다. 
   - 그렇지 않다면 스프링 MVC 구조에 특화된 필터 기능을 제공하는 인터셉터를 사용하는 것이 편리하다.
 
+---
+
 </details>
 
 <details>
@@ -739,6 +753,30 @@ DDD 구조
    - Platform : 테스트를 실행해주는 런쳐 제공. TestEngine API 제공
    - Jupiter : JUnit5를 지원하는 TestEngine API 구현체
    - Vintage : JUnit 4와 3을 지원하는 TestEngine 구현체
+2. JDK 요구사항이 Java5 이상에서 Java8 이상으로 변경
+3. `@Before` -> `@BeforeEach` 등 애노테이션 명이 변경되고, `@Nested`와 같이 새로운 애노테이션이 추가되어 편리해졌다.
+
+---
+
+</details>
+
+- 커넥션 풀
+- DataSource
+- 트랜잭션을 추상화하는 이유
+- 트랜잭션 동기화 매니저
+- 선언적 트랜잭션 vs 프로그래밍 방식 트랜잭션
+- 
+  Propagation 전파단계
+
+<details>
+   <summary>@Transactional</summary>
+
+<br/>
+
+1. 단일 Jar에서 Platform, Jupiter, Vintage 세가지 모듈로 구성되도록 변경되었다.
+    - Platform : 테스트를 실행해주는 런쳐 제공. TestEngine API 제공
+    - Jupiter : JUnit5를 지원하는 TestEngine API 구현체
+    - Vintage : JUnit 4와 3을 지원하는 TestEngine 구현체
 2. JDK 요구사항이 Java5 이상에서 Java8 이상으로 변경
 3. `@Before` -> `@BeforeEach` 등 애노테이션 명이 변경되고, `@Nested`와 같이 새로운 애노테이션이 추가되어 편리해졌다.
 
