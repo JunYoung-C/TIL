@@ -1,34 +1,4 @@
 # JAVA
-애노테이션에 대해서 설명해주세요.
-클래스는 무엇이고 객체는 무엇인가요?
-강한 결합과 느슨한 결합이 무엇인지 설명해주세요.
-Mutable 객체와 Immutable 객체의 차이점에 대해 설명해주세요.
-자바에서 null을 안전하게 다루는 방법에 대해 설명해주세요.
-
-클래스 객체 인스턴스의 차이
-객체란 무엇인가
-
-Error, Exception
-Checked Exception, Unchecked Exception
-Java Collections
-String, StringBuilder, StringBuffer
-Blocking vs Non-Blocking
-Sync vs Async
-리플렉션
-Stream
-Fork Join Pool
-람다식
-Optional
-자바8 추가된 내용
-Java 8 -> Java 11
-함수형 프로그래밍
-멀티스레드 프로그래밍
-Java 동기화 방식
-Synchronized와 Lock & Condition 동기화
-Atomic 동기화
-hashcode
-
----
 
 <details>
    <summary>Java 장단점</summary>
@@ -46,6 +16,28 @@ hashcode
 - 단점
   - 비교적 느림
       - 한번의 컴파일링으로 실행 가능한 기계어가 만들어지지 않고 JVM에 의해 기계어로 번역되고 실행되는 과정을 거치기 때문에 조금 느리다.
+
+---
+
+</details>
+
+<details>
+   <summary>클래스 객체 인스턴스의 차이</summary>
+
+<br/>
+
+- 클래스(Class)
+  - 객체를 만들어 내기 위한 설계도 혹은 틀
+  - 연관되어 있는 변수와 메서드의 집합
+- 객체(Object)
+  - 소프트웨어 세계에 구현할 대상
+  - '클래스의 인스턴스(instance)' 라고도 부른다.
+  - 객체는 모든 인스턴스를 대표하는 포괄적인 의미를 갖는다.
+- 인스턴스(Instance)
+  - 설계도를 바탕으로 소프트웨어 세계에 구현된 구체적인 실체
+  - 실체화된 인스턴스는 메모리에 할당된다.
+  - 인스턴스는 객체에 포함된다고 볼 수 있다.
+  - 객체는 현실 세계에 가깝고, 인스턴스는 소프트웨어 세계에 가깝다.
 
 ---
 
@@ -221,6 +213,17 @@ JVM은 크게 Class Loader, Execution engine, Runtime Data Area 세가지로 구
 3. 2번 과정이 반복되면서 Survival 1 -> 0 -> 1 이동이 반복 
 4. age-bit가 일정 값 이상이 되면 해당 객체에 대해 promotion 과정이 진행되어 Old Generation 영역으로 이동 
 5. Old Generation 영역이 꽉차면 Major GC가 발생
+---
+
+</details>
+
+<details>
+   <summary>java9의 default GC</summary>
+
+<br/>
+
+
+
 ---
 
 </details>
@@ -491,10 +494,226 @@ JVM은 크게 Class Loader, Execution engine, Runtime Data Area 세가지로 구
 </details>
 
 <details>
-   <summary></summary>
+   <summary>애노테이션</summary>
 
 <br/>
 
+- 애노테이션은 인터페이스를 기반으로 한 문법으로, 주석처럼 코드에 달아 클래스에 특별한 의미를 부여하거나 기능을 주입할 수 있다.
+  - 리플렉션 기술을 활용하여, 특정 애노테이션이 붙은 객체에 의존성을 주입하는 등의 작업을 할 수 있다.
+- `@Target`과 같이 애너테이션을 정의할 때 사용하는 메타 애너테이션이 있다.
+
+---
+
+</details>
+
+<details>
+   <summary>Error, Exception</summary>
+
+<br/>
+
+![그림3](https://backtony.github.io/assets/img/post/interview/java-3.PNG)
+
+- 에러
+  - 스택 오버 플로우나 메모리 부족과 같이 복구할 수 없는 심각한 오류이다.
+  - 런타임에 발생한다.
+- 예외
+  - 프로그래머가 try catch로 수습할 수 있는 오류이다.
+  - 컴파일 시점에 발생하는 Checked Exception과 런타임 시점에 발생하는 Unchecked Exception으로 나뉜다.
+
+---
+
+</details>
+
+<details>
+   <summary>Checked Exception, Unchecked Exception</summary>
+
+<br/>
+
+- Checked Exception
+  - IOException, SQLException 등 컴파일 시점에 발생하는 예외이다.
+  - 사용하는 모든 곳에 throws를 명시해야하는데, 이는 의존성 문제를 야기한다.
+- Unchecked Exception
+  - NullPointException과 같이 런타임 시점에 발생하는 예외이다.
+  - Exception 클래스 하위 RuntimeException 클래스를 상속받는다.
+
+---
+
+</details>
+
+<details>
+   <summary>Java Collections</summary>
+
+<br/>
+
+![그림1](https://backtony.github.io/assets/img/post/interview/java-1.PNG)  
+- 다량의 데이터를 효율적으로 관리할 수 있도록 표준화한 클래스들을 말한다.
+- 크게 List와 Set이 상속한 Collection 인터페이스와 Map 인터페이스로 나뉜다. 
++ Map
+    - Key와 Value의 쌍으로 이루어진 데이터 집합
+    - 순서를 유지하지 않는다.
+    - Key는 중복이 허용되지 않고, Value는 중복을 허용한다.
++ Collection
+    + Collection은 Iterator 인터페이스를 상속한다.
+    - List
+      - 순서가 있는 데이터 집합
+      - 데이터 중복을 허용한다.
+    - Set
+        - 순서를 유지하지 않는 데이터 집합
+        - 데이터 중복을 허용하지 않는다.
+
+<br>
+
+---
+
+</details>
+
+<details>
+   <summary>Map 구현체 종류</summary>
+
+<br/>
+
++ HashMap
+  + key와 value를 묶은 entry의 배열로 저장되며, 배열의 인덱스는 내부 해쉬 함수를 통해 계산된다.
+  - key와 value에 null값을 허용 한다.
+  - 비동기 처리
++ LinkedHashMap
+    - HashMap에 저장 순서 유지 기능을 추가하였다.
+    - 비동기 처리
++ TreeMap
+  + 이진 검색 트리의 형태로 키와 값의 쌍으로 이루어진 데이터를 저장한다.
+      - 내부적으로 __레드-블랙 트리(균형 이진 탐색 트리)__ 로 저장된다.
+  - 범위 검색이나 정렬이 필요한 경우 HashMap 대신 TreeMap을 사용한다.
+  - 키값에 대한 Compartor 구현으로 정렬 방법을 지정할 수 있다.
++ ConCurrentHashMap
+    - key,value에 null값 비허용
+    - __쓰기작업에서만 동기 처리__
++ HashTable
+    - key,value에 null값 비허용
+    - __모든 작업에 동기 처리__
+
+---
+
+</details>
+
+<details>
+   <summary>Set 구현체 종류</summary>
+
+<br/>
+
++ HashSet
+    - 저장 순서를 유지하지 않는 데이터의 집합
+    - 해시 알고리즘을 사용하여 검색속도가 매우 빠르다.
+    - 내부적으로 HashMap 인스턴스를 이용하여 요소를 저장한다.
++ LinkedHashSet
+    - HashSet에 저장 순서 유지 기능 추가
++ TreeSet
+    - 데이터가 정렬된 상태로 저장되는 이진 탐색 트리의 형태로 요소를 저장한다.
+      - 이진 탐색 트리의 성능을 향상시킨 레드-블랙 트리(Red-Black tree)로 구현되어 있다.
+    - Compartor 구현으로 정렬 방법을 지정할 수 있다.
+
+---
+
+</details>
+
+<details>
+   <summary>List 구현체 종류</summary>
+
+<br/>
+
++ ArrayList
+    - 내부적으로 배열을 이용해서 데이터를 순차적으로 저장한다.
+    - 배열에 저장할 공간이 없으면 더 큰 배열을 생성해서 기존 배열의 값을 복사하여 사용한다.
+      - 재할당 시 크기가 두 배로 증가한다.
+    - 데이터 삽입, 삭제 시 해당 데이터 이후 모든 데이터가 복사되므로, 삽입과 삭제가 빈번히 일어나는 경우에는 부적합하다.
+    - 검색의 경우는 인덱스의 데이터를 가져오면 되므로 빠르다.
++ LinkedList
+    - 불연속적으로 존재하는 데이터를 서로 연결한 형태로 되어있다.
+    - 데이터의 삽입이나 삭제 시 데이터 이동 없이 주소지만 변경하면 되므로 삽입, 삭제가 빈번한 데이터에 적합하다.
+    - 데이터의 검색 시 처음부터 노드를 순회하므로 검색에는 부적합하다.
+    - 큐, 양방향 큐를 만들기 위한 용도로 사용한다.
++ Vector
+    - 내부에서 자동으로 동기처리가 일어난다.
+    - 성능이 좋지 않아 잘 사용하지 않는다.
+    - 재할당 시 크기가 두 배로 증가한다.
++ Stack
+  + 후입선출 구조로 데이터를 저장한다.
+  - new 키워드로 직접 사용 가능
+  - Vector를 상속받아 동기 처리
+
+---
+
+</details>
+
+<details>
+   <summary>String, StringBuilder, StringBuffer</summary>
+
+<br/>
+
++ String
+    - String은 문자열을 저장하는 참조 타입이다.
+    - String에 저장되는 문자열은 private final char[] 형태이므로 값을 변경할 수 없다.
+    - 문자열 연산 시 새로 객체를 만드는 Overhead가 발생한다.
++ StringBuilder, StringBuilder
+  + 공통점
+    + new 연산으로 객체를 한번만 생성한다.
+    + 문자열 연산 시 새로 객체를 만들지 않고, 크기를 변경시킨다.
+    + StringBuilder와 StringBuffer 클래스의 메서드는 동일하다.
+  + 차이점
+    + StringBuilder는 비동기 처리, StringBuffer는 동기 처리 
+
+- 결론
+  - String은 문자열 연산이 적으면 사용한다.
+  - StringBuilder는 문자열 연산이 많은 Single-Thread 환경에서 사용한다.
+  - StringBuffer는 문자열 연산이 많은 Multi-Thread 환경에서 사용한다.
+
+---
+
+</details>
+
+<details>
+   <summary>String new와 리터럴("") 차이</summary>
+
+<br/>
+
+- String은 new 연산자나 리터럴("")를 사용하여 새로운 객체를 생성할 수 있다.
+- new 연산자로 생성하면, 값이 같더라도 매번 새로운 객체를 생성한다.
+  - `intern()` 메서드를 사용하면 String Constant Pool로 이동시키거나, 이미 존재한다면 해당 문자열을 반환한다.
+- 리터럴("")은 처음에만 새로운 객체를 생성하고, 이미 존재하는 String 값이라면 재사용한다.
+  - Heap 영역 내의 String Constant Pool에서 관리된다.
+
+---
+
+</details>
+
+<details>
+   <summary>Blocking vs Non-Blocking</summary>
+
+<br/>
+
+- 자신의 작업이 막히는지 막히지 않는지로 보면 쉽다.
+
+### Blocking
+- 함수 A가 실행되다가 함수 B를 호출하면 제어권을 함수 A는 함수 B에게 제어권을 넘긴다.
+- 따라서 함수 B가 실행을 완료하고 제어권을 돌려줄 때까지 아무 작업도 할 수 없다.
+
+### Non-Blocking
+- 함수 A가 함수 B를 호출하더라도 제어권을 넘기지 않는다.
+- 따라서 함수 B를 호출한 뒤에도 함수 A는 계속 실행된다.
+
+---
+
+</details>
+
+<details>
+   <summary>Synchronous vs Asynchronous</summary>
+
+<br/>
+
++ Synchronous(동기)
+    - 함수 A가 함수 B를 호출하면, 함수 A는 B가 결과를 반환할 때까지 대기한다. 
++ Asynchronous(비동기)
+    -  함수 A가 함수 B를 호출더라도, 함수 A는 함수 B의 작업 완료 여부를 신경쓰지 않는다.
+      - 함수 A가 함수 B를 호출할 때 콜백 함수를 함께 전달해서, 함수 B의 작업이 끝나면 콜백 함수가 실행된다.
 
 
 ---
@@ -502,165 +721,140 @@ JVM은 크게 Class Loader, Execution engine, Runtime Data Area 세가지로 구
 </details>
 
 <details>
-   <summary></summary>
+   <summary>리플렉션</summary>
 
 <br/>
 
-
+- 접근 제어자와 상관 없이 런타임에 메모리에 올라간 클래스의 생성자, 메소드, 변수 등에 접근할 수 있는 기술
+  - 자바는 정적 언어이기 때문에 컴파일 시점에 객체 타입을 결정한다.
+- 주로 프레임워크나 라이브러리에서 사용된다.
+  - 컴파일 시점에는 사용자가 작성한 클래스가 어떤 타입을 가지는지 알 수 없기 때문이다.
+  - ex) 스프링에서 필드 주입 시 필드가 private 이더라도 의존관계 주입이 가능한 이유가 리플렉션 덕분이다. 
++ 주의점
+    - 컴파일 타임에 확인되지 않고 런타임 시에만 발생하는 문제를 만들 수 있다.
+    - 접근 제어자를 무시할 수 있다.
+    - 성능이 떨어지므로, 꼭 필요한 경우에만 사용한다.
 
 ---
 
 </details>
 
 <details>
-   <summary></summary>
+   <summary>리플렉션과 기본 생성자</summary>
 
 <br/>
 
-
+- 리플렉션을 사용하는 스프링이나 JPA 등에서 기본 생성자를 요구한다.
+- 리플렉션은 생성자의 인자 정보를 가져오지 못한다. 따라서 파라미터 생성자만 있는 경우 리플렉션이 객체를 생성하지 못한다.
+- 기본 생성자로 객체를 생성한다면, 필드 값 등은 리플렉션으로 넣어줄 수 있다.
 
 ---
 
 </details>
 
 <details>
-   <summary></summary>
+   <summary>Stream</summary>
 
 <br/>
 
-
++ java8에서 추가된 API
++ 컬렉션, 배열 등에 저장되어있는 요소들을 하나씩 참조하여 반복 처리를 가능하게 한다.
++ 불필요한 코드를 줄일 수 있고, 가독성을 향상시킨다.
++ 특징
+  + 원본 데이터를 변경하지 않는다.
+    + 원본 데이터를 읽어서 사용한다.
+  + 한번 사용하면 닫혀서 다시 사용할 수 없다.
+  + 작업을 내부 반복으로 사용한다.
+    + 내부 반복이란 반복문을 메서드의 내부로 숨겨서 처리한다는 것을 말한다. `forEach()`의 경우 메서드 안에 for문을 넣은 것이다.
++ 구조
+    - Stream 생성
+    - 중간 연산
+        - 데이터를 가공하는 단계에 해당되며, 스트림을 반환하므로 다른 연산과 연결해서 사용할 수 있다.
+        - 필터링 : filter, distinct
+        - 변환 : map, flatMap
+        - 제한 : limit, skip
+        - 정렬 : sorted
+        - 연산결과확인 : peek
+    - 최종 연산
+        - 지연된 모든 중간 연산들을 수행하여 최종 결과를 출력한다. 이후 stream이 닫히므로 재사용할 수 없다.
+        - 출력 : foreach
+        - 소모 : reduce
+        - 검색 : findFirst, findAny
+        - 검사 : anyMatch, allMatch, noneMatch
+        - 통계 : count, min, max
+        - 연산 : sum, savage
+        - 수집 : collect
 
 ---
 
 </details>
 
 <details>
-   <summary></summary>
+   <summary>lambda</summary>
 
 <br/>
 
-
++ 자바 8에서 등장
++ __메서드를 하나의 식으로 표현하는 익명 함수__
+  + 메서드와 함수는 같은 의미이지만, 메서드는 클래스에 반드시 속해야 한다는 제약이 있기 때문에 함수라는 용어 사용
++ 인터페이스 내에 한 개의 추상 메서드만 정의되어있는 함수형(Function) 인터페이스를 통해 사용 가능
++ ex) Comparator, Runnuble
++ 장점
+    - 기존에 익명함수로 작성하던 코드를 줄일 수 있음
+    - 가독성 증가
+    - 병렬 프로그래밍이 용이하다.
 
 ---
 
 </details>
 
 <details>
-   <summary></summary>
+   <summary>Optional</summary>
 
 <br/>
 
-
+- 모든 타입의 참조 변수를 담을 수 있는 제네릭 클래스이다.
+- 반환 값 null 체크를 편리하게 할 수 있도록 기능을 제공한다.
+  - Objects의 `isNull()`, `nonNull()`등도 널 체크를 편리하게 하기 위해서 존재한다.
 
 ---
 
 </details>
 
 <details>
-   <summary></summary>
+   <summary>자바8 추가된 내용</summary>
 
 <br/>
 
++ optional
++ stream
++ lambda
++ 새로운 날짜 API
+  + LocalDataTime, LocalDate 등
++ 인터페이스에 default 메서드와 static 메서드를 포함할 수 있게 되었다.
 
+**기존 날짜 API의 문제점**
++ 불변 객체가 아님
++ 헷갈리는 월 지정(1월을 0으로 표현)
++ 일관성 없는 요일 상수 (Calendar는 일요일이 1부터, Date는 0부터 시작)
++ 상수 필드 남용 등
 
 ---
 
 </details>
 
 <details>
-   <summary></summary>
+   <summary>Java 8 -> Java 11</summary>
 
 <br/>
 
-
-
----
-
-</details>
-
-<details>
-   <summary></summary>
-
-<br/>
-
-
-
----
-
-</details>
-
-<details>
-   <summary></summary>
-
-<br/>
-
-
-
----
-
-</details>
-
-<details>
-   <summary></summary>
-
-<br/>
-
-
-
----
-
-</details>
-
-<details>
-   <summary></summary>
-
-<br/>
-
-
-
----
-
-</details>
-
-<details>
-   <summary></summary>
-
-<br/>
-
-
-
----
-
-</details>
-
-<details>
-   <summary></summary>
-
-<br/>
-
-
-
----
-
-</details>
-
-<details>
-   <summary></summary>
-
-<br/>
-
-
-
----
-
-</details>
-
-<details>
-   <summary></summary>
-
-<br/>
-
-
++ __default GC가 Parallel GC에서 G1GC로 변경__
++ strip(), stripLeading(), stripTrailing(), isBlank(), repeat(n) 과 같은 새로운 문쟈열 메서드 추가
++ writeString, readString, isSameFile 과 같은 __File관련 새로운 메서드 추가__
++ Predicate 인터페이스에 부정을 나타내는 not() 메서드 추가
++ 람다에서 로컬 변수 Var 사용
+  + var는 변수를 선언할 때 타입을 생략할 수 있으며, 컴파일러가 타입을 추론한다.
++ Javac를 통해 컴파일하지 않고도 바로 java 파일을 실행할 수 있게 되었다.
 
 ---
 
