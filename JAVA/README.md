@@ -382,7 +382,7 @@ JVM은 크게 Class Loader, Execution engine, Runtime Data Area 세가지로 구
 <br/>
 
 + final 키워드
-    - 변수, 메서드 클래스가 __변경 불가능__ 하도록 만든다.
+    - 변수, 메서드, 클래스가 __변경 불가능__ 하도록 만든다.
     - 기본 타입 변수에 적용 시
         - 해당 변수의 값 변경 불가능하다.
     - 참조 변수에 적용 시
@@ -458,7 +458,7 @@ JVM은 크게 Class Loader, Execution engine, Runtime Data Area 세가지로 구
 <br/>
 
 + 오버로딩
-    - 한 클래스 내에 같은 이름의 메서드를 여러 개 정의하는 것을 오버라이딩이라고 한다.
+    - 한 클래스 내에 같은 이름의 메서드를 여러 개 정의하는 것을 오버로딩이라고 한다.
     - 이름이 같은 메서드들은 서로 매개변수의 개수나 타입이 달라야 한다.
 + 오버라이딩
     - 상위 클래스 혹은 인터페이스에 존재하는 메소드를 하위 클래스에서 필요에 맞게 재정의하는 것을 의미한다.
@@ -484,7 +484,7 @@ JVM은 크게 Class Loader, Execution engine, Runtime Data Area 세가지로 구
 + 인터페이스
   - 일종의 추상 클래스로, class 키워드 대신 interface 키워드로 선언한다.
     - 모든 멤버 변수는 `public static final`이어야 하며, 이를 생략할 수 있다.
-    - 모든 메서드는 추상메서드이며, 이를 생략할 수 있다. 단, JDK 1.8부터 static 메서드와 default 메서드가 추가되었다.
+    - 모든 메서드는 추상메서드이며, `abstract public`를 생략할 수 있다. 단, JDK 1.8부터 static 메서드와 default 메서드가 추가되었다.
     - 다중 상속이 가능하다.
   - 목적
     - 관련성이 낮은 클래스들이 논리적으로 같은 기능을 가지는 경우 구현을 강제하기 위함.
@@ -499,7 +499,7 @@ JVM은 크게 Class Loader, Execution engine, Runtime Data Area 세가지로 구
 <br/>
 
 - 애노테이션은 인터페이스를 기반으로 한 문법으로, 주석처럼 코드에 달아 클래스에 특별한 의미를 부여하거나 기능을 주입할 수 있다.
-  - 리플렉션 기술을 활용하여, 특정 애노테이션이 붙은 객체에 의존성을 주입하는 등의 작업을 할 수 있다.
+  - 리플렉션 기술을 활용하여, 특정 애노테이션이 붙은 멤버에 의존성을 주입하는 등의 작업을 할 수 있다.
 - `@Target`과 같이 애너테이션을 정의할 때 사용하는 메타 애너테이션이 있다.
 
 ---
@@ -713,7 +713,7 @@ JVM은 크게 Class Loader, Execution engine, Runtime Data Area 세가지로 구
     - 함수 A가 함수 B를 호출하면, 함수 A는 B가 결과를 반환할 때까지 대기한다. 
 + Asynchronous(비동기)
     -  함수 A가 함수 B를 호출더라도, 함수 A는 함수 B의 작업 완료 여부를 신경쓰지 않는다.
-      - 함수 A가 함수 B를 호출할 때 콜백 함수를 함께 전달해서, 함수 B의 작업이 끝나면 콜백 함수가 실행된다.
+       - 함수 A가 함수 B를 호출할 때 콜백 함수를 함께 전달해서, 함수 B의 작업이 끝나면 콜백 함수가 실행된다.
 
 
 ---
@@ -798,7 +798,7 @@ JVM은 크게 Class Loader, Execution engine, Runtime Data Area 세가지로 구
 + __메서드를 하나의 식으로 표현하는 익명 함수__
   + 메서드와 함수는 같은 의미이지만, 메서드는 클래스에 반드시 속해야 한다는 제약이 있기 때문에 함수라는 용어 사용
 + 인터페이스 내에 한 개의 추상 메서드만 정의되어있는 함수형(Function) 인터페이스를 통해 사용 가능
-+ ex) Comparator, Runnuble
++ ex) Comparator, Runnable
 + 장점
     - 기존에 익명함수로 작성하던 코드를 줄일 수 있음
     - 가독성 증가
@@ -830,7 +830,7 @@ JVM은 크게 Class Loader, Execution engine, Runtime Data Area 세가지로 구
 + stream
 + lambda
 + 새로운 날짜 API
-  + LocalDataTime, LocalDate 등
+  + LocalDateTime, LocalDate 등
 + 인터페이스에 default 메서드와 static 메서드를 포함할 수 있게 되었다.
 
 **기존 날짜 API의 문제점**
@@ -849,7 +849,7 @@ JVM은 크게 Class Loader, Execution engine, Runtime Data Area 세가지로 구
 <br/>
 
 + __default GC가 Parallel GC에서 G1GC로 변경__
-+ strip(), stripLeading(), stripTrailing(), isBlank(), repeat(n) 과 같은 새로운 문쟈열 메서드 추가
++ strip(), stripLeading(), stripTrailing(), isBlank(), repeat(n) 과 같은 새로운 문자열 메서드 추가
 + writeString, readString, isSameFile 과 같은 __File관련 새로운 메서드 추가__
 + Predicate 인터페이스에 부정을 나타내는 not() 메서드 추가
 + 람다에서 로컬 변수 Var 사용
