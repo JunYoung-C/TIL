@@ -315,7 +315,20 @@
 
 **3. 차이점**
 - 웹 서버는 정적 리소스(파일)를 제공하고, WAS는 애플리케이션 로직을 수행한다.
-- WAS도 웹 서버 기능을 제공할 수 있기 때문에 웹 서버 없이 WAS와 DB 만으로도 시스템 구성이 가능하다. 하지만 애플리케이션 로직이 정적 리소스 때문에 수행이 어려울 수 있고, WAS 장애 시 오류 화면 노출이 불가능하다는 단점이 있다.
+
+---
+
+</details>
+
+<details>
+   <summary>웹 서버가 필요한 이유</summary>
+
+<br/>
+
+- 정적 컨텐츠는 웹 서버가 담당하고, 동적 컨텐츠는 WAS가 담당하도록 하여 부하를 분산할 수 있다.
+- 여러 대의 WAS가 처리할 요청을 웹 서버에서 적절히 나누어 배분할 수 있다.(로드 밸런싱)
+- WAS에 주기적으로 요청을 보내서 서비의 상태를 확인하는 Heath check가 가능하다.
+- 어떤 WAS가 요청을 처리하는지 클라이언트가 알 수 없다.
 
 ---
 
@@ -396,8 +409,8 @@
 1. 사용자가 URL을 입력
 2. Servlet Container는 쓰레드 풀에서 쓰레드를 꺼내 할당해주고, HttpServletRequest 객체와 HttpServletResponse 객체를 생성한다.
 3. 사용자가 요청한 URL로 어떤 서블릿에 대한 요청인지 찾는다.
-4. 해당 서블릿의 service()를 실행한다.
-5. 실행이 끝나면 HttpServletResponse 객체 정보를 바탕으로, 클라이언트에게 응답을 보낸다.
+4. 서블릿 컨테이너에 서블릿이 존재하지 않으면 초기화하고 있다면 가져와서 service() 메서드를 호출한다.
+5. service 메서드가 수행이 끝나면, HttpServletResponse 객체 정보를 바탕으로, 클라이언트에게 응답을 보낸다.
 6. HttpServletRequest 객체와 HttpServletResponse 객체는 소멸되고, 쓰레드 풀로 쓰레드를 반환한다. 
 
 ---
@@ -606,11 +619,11 @@
 
 <br/>
 
-- `@ModelAttribute`
+- form 요청 - `@ModelAttribute`
   - 필드 관련 예외는 `Bean Validation`과 `BindingResult`가 제공하는 `rejectValue()`로 잡을 수 있다. 
   - 오브젝트 관련 예외는 `BindingResult`가 제공하는 `reject()`를 사용한다.
   - 예외를 모두 잡지 못한 경우를 위해 스프링 부트의 경우 `/errer` 경로에 에러 페이지를 만들어 놓으면, `BasicErrorController`가 에러 페이지를 자동으로 등록해준다.
-- `@ResponseBody`
+- api 요청
   - 간단한 필드 예외는 `Bean Validation`과 `@ExceptionHandler`의 조합으로 처리할 수 있다.
   - 이외에는 예외를 던지고 `@ExceptionHandler`로 처리한다.
 
@@ -754,7 +767,7 @@
 
 **주의점**
 
-1. 어떤 객체가 A와 B라는 메서드를 가지고 있고 B 메서드에는 `@Transactional`이 적용되어 있다고 하자. 이때, A 메서드가 B 메서드를 호출하는 경우 `@Transactional`이 적용되지 않는다.
+1. 어떤 클래스가 A와 B라는 메서드를 가지고 있고 B 메서드에는 `@Transactional`이 적용되어 있다고 하자. 이때, A 메서드가 B 메서드를 호출하는 경우 `@Transactional`이 적용되지 않는다.
     - 스프링 AOP는 실제 대상 코드에 트랜잭션 코드를 붙이는 방식이 아닌, 메서드 오버라이딩을 통해 트랜잭션 처리를 적용하는 방식으로 프록시를 생성하기 때문이다. 따라서 트랜잭션이 적용된 상태로 동작하려면 프록시를 통해 접근해야 한다. 하지만 위의 방식은 실제 대상 코드를 호출하였기 때문에 트랜잭션이 적용되지 않는다.
 2. private 메서드는 `@Transactional`을 붙여도 트랜잭션이 동작하지 않는다.
    - 스프링 AOP는 메서드 오버라이딩을 통해 프록시를 생성한다. 하지만 private 메소드를 오버라이딩을 할 수 없기 때문이다.
