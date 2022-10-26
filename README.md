@@ -6,7 +6,6 @@
 - [JAVA](JAVA/README.md)
 - [Spring](Spring/README.md)
 - [JPA](JPA/README.md)
-- [네트워크](Network/README.md)
 - [데이터베이스](Database/README.md)
 
 ## 강의 요약 및 추가 보충
